@@ -1,5 +1,6 @@
 export const COLORS = {
     primaryColor: "#3ebde0",
+    secondaryColor: "#f6f9ff",
     primaryWhite: "white",
     primaryGray: "#565e6c",
     secondaryGray: "#f3f4f6",
@@ -15,4 +16,4 @@ export const FONTFAMILY = {
     poppins_regular: 'Poppins-Regular',
     poppins_semibold: 'Poppins-SemiBold',
     poppins_thin: 'Poppins-Thin',
-  };
+};

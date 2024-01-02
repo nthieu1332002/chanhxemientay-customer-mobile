@@ -4,6 +4,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
 import TabNavigator from './src/navigators/TabNavigator';
 import SearchScreen from 'screens/SearchScreen';
+import SearchListScreen from 'screens/SearchListScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -19,6 +20,10 @@ function App(): React.JSX.Element {
           name="Search"
           component={SearchScreen}
           options={{animation: 'slide_from_bottom'}}></Stack.Screen>
+          <Stack.Screen
+          name="SearchList"
+          component={SearchListScreen}
+          options={{animation: 'slide_from_right'}}></Stack.Screen>
         {/* <Stack.Screen
           name="Payment"
           component={PaymentScreen}
