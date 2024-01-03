@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
     gap: 5,
   },
   textItem: {
-    fontWeight: 'bold',
+    fontWeight: '500',
     fontSize: 16,
   },
 });

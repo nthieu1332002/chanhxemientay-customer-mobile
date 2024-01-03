@@ -37,7 +37,7 @@ const HeaderBar: React.FC<HeaderBarProps> = ({title, navigation}) => {
 const styles = StyleSheet.create({
   HeaderText: {
     fontFamily: FONTFAMILY.poppins_semibold,
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: 'bold',
     color: COLORS.primaryBlack,
     textAlign: 'center',
