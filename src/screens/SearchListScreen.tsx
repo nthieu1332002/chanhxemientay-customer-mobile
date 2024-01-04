@@ -1,14 +1,20 @@
 import {
   ActivityIndicator,
+  Dimensions,
   FlatList,
-  Image,
-  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {Fragment, useEffect, useState} from 'react';
+import React, {
+  Fragment,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {COLORS} from 'theme/theme';
 import {packageType} from 'data/constants';
@@ -16,8 +22,12 @@ import Octicons from 'react-native-vector-icons/Octicons';
 import RouteItem from 'components/RouteItem';
 import axios from 'lib/axios';
 import qs from 'query-string';
-
-const data = [
+import {BottomSheetFooter, BottomSheetModal} from '@gorhom/bottom-sheet';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {useSharedValue} from 'react-native-reanimated';
+import RouteDetail from 'components/RouteDetail';
+import {BlurView} from '@react-native-community/blur';
+const data: Booking[] = [
   {
     id: 936,
     start_station: {
@@ -178,69 +188,137 @@ export type Booking = {
     name: string;
     address: string;
     city_code: string;
-    distance_to_sender: number;
+    distance_to_sender: number | null;
     partner: {
       id: number;
       name: string;
       avatar: string;
     };
+    latitude: number;
+    longitude: number;
   };
   end_station: {
     id: number;
     name: string;
     address: string;
-    city_code: number;
-    distance_to_receiver: number;
+    city_code: string;
+    distance_to_receiver: number | null;
     partner: {
       id: number;
       name: string;
       avatar: string;
     };
+    latitude: number;
+    longitude: number;
   };
   lowest_price: number;
   total_distance: number;
-  note: string;
+  note: string | null;
   acceptable_package_types: number[];
 };
+
+const {height: SCREEN_HEIGHT} = Dimensions.get('window');
 const SearchListScreen = ({navigation, route}: any) => {
   const {from, to, package_types} = route.params;
   const [routes, setRoutes] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(false);
-  useEffect(() => {
-    const getSearch = async () => {
-      setLoading(true);
-      try {
-        const url = qs.stringifyUrl(
-          {
-            url: '/route/search',
-            query: {
-              start_city_code: from.parent_code,
-              start_district_code: from.code,
-              end_city_code: to.parent_code,
-              end_district_code: to.code,
-              package_types: package_types.toString(),
-              number_of_results: 20,
-            },
-          },
-          {skipNull: true, skipEmptyString: true},
-        );
-        console.log('url', url);
-        const res = await axios.get(url);
-        setRoutes(res.data.data);
-      } catch (error) {
-        console.log('Failed to fetch search route', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    getSearch();
-  }, [package_types, from, to]);
+  const routeDetailSheetModalRef = useRef<BottomSheetModal>(null);
+  const [detail, setDetail] = useState<Booking>();
+  const {bottom: bottomSafeArea, top: topSafeArea} = useSafeAreaInsets();
+  const animatedRouteDetailIndex = useSharedValue<number>(0);
+  const animatedRouteDetailPosition = useSharedValue<number>(SCREEN_HEIGHT);
+  const routeDetailSnapPoints = useMemo(
+    () => [320 + bottomSafeArea],
+    [bottomSafeArea],
+  );
+  // useEffect(() => {
+  //   const getSearch = async () => {
+  //     setLoading(true);
+  //     try {
+  //       const url = qs.stringifyUrl(
+  //         {
+  //           url: '/route/search',
+  //           query: {
+  //             start_city_code: from.parent_code,
+  //             start_district_code: from.code,
+  //             end_city_code: to.parent_code,
+  //             end_district_code: to.code,
+  //             package_types: package_types.toString(),
+  //             number_of_results: 20,
+  //           },
+  //         },
+  //         {skipNull: true, skipEmptyString: true},
+  //       );
+  //       console.log('url', url);
+  //       const res = await axios.get(url);
+  //       setRoutes(res.data.data);
+  //     } catch (error) {
+  //       console.log('Failed to fetch search route', error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+  //   getSearch();
+  // }, [package_types, from, to]);
 
-  const onChooseRoute = (item: Booking) => {
-    navigation.push('BookingForm', {
-      item,
-    });
-  }
+  const onChooseRoute = useCallback(
+    (item: Booking) => {
+      setDetail(undefined);
+      routeDetailSheetModalRef.current?.dismiss();
+      navigation.push('BookingForm', {
+        item,
+      });
+    },
+    [navigation],
+  );
+  const handleOpenDetail = useCallback((item: Booking) => {
+    setDetail(item);
+    routeDetailSheetModalRef.current?.present();
+  }, []);
+
+  const renderFooter = useCallback(
+    (props: any) => (
+      <BottomSheetFooter {...props} bottomInset={24}>
+        <View style={styles.Footer}>
+          <View style={{flexDirection: 'column', alignItems: 'center'}}>
+            <Text style={{color: COLORS.primaryBlack, fontWeight: '500'}}>
+              Giá chỉ từ
+            </Text>
+            <Text
+              style={{
+                color: COLORS.primaryColor,
+                fontSize: 20,
+                fontWeight: 'bold',
+              }}>
+              {new Intl.NumberFormat('en-Us').format(detail?.lowest_price ?? 0)}
+              đ
+            </Text>
+          </View>
+          <TouchableOpacity
+            style={styles.ChooseButton}
+            onPress={() => {
+              if (detail) {
+                onChooseRoute(detail);
+              }
+            }}>
+            <Text style={styles.footerText}>Đặt ngay</Text>
+          </TouchableOpacity>
+        </View>
+      </BottomSheetFooter>
+    ),
+    [detail, onChooseRoute],
+  );
+
+  const renderBackdrop = useCallback(
+    () => (
+      <BlurView
+        blurType="dark"
+        blurAmount={5}
+        style={{...StyleSheet.absoluteFillObject}}
+      />
+    ),
+    [],
+  );
   return (
     <View style={styles.ScreenContainer}>
       <View style={styles.Header}>
@@ -288,18 +366,13 @@ const SearchListScreen = ({navigation, route}: any) => {
             </Text>
             <FlatList
               showsVerticalScrollIndicator={false}
-              data={routes}
+              data={data}
               contentContainerStyle={[styles.FlatListContainer]}
               renderItem={({item}) => (
                 <TouchableOpacity
-                  onPress={() => {
-                    navigation.push('Details', {
-                      // index: item.index,
-                      // id: item.id,
-                      // type: item.type,
-                    });
-                  }}>
-                  <RouteItem item={item} onPress={onChooseRoute}/>
+                  key={item.id}
+                  onPress={() => handleOpenDetail(item)}>
+                  <RouteItem item={item} onPress={onChooseRoute} />
                 </TouchableOpacity>
               )}
               keyExtractor={item => item.id.toString()}
@@ -307,6 +380,18 @@ const SearchListScreen = ({navigation, route}: any) => {
           </>
         )}
       </View>
+      <BottomSheetModal
+        ref={routeDetailSheetModalRef}
+        key="routeDetailSheet"
+        name="routeDetailSheet"
+        snapPoints={routeDetailSnapPoints}
+        topInset={topSafeArea}
+        animatedIndex={animatedRouteDetailIndex}
+        animatedPosition={animatedRouteDetailPosition}
+        backdropComponent={renderBackdrop}
+        footerComponent={renderFooter}>
+        <RouteDetail item={detail} />
+      </BottomSheetModal>
     </View>
   );
 };
@@ -368,5 +453,28 @@ const styles = StyleSheet.create({
   },
   FlatListContainer: {
     gap: 15,
+  },
+  footerContainer: {
+    padding: 12,
+  },
+  Footer: {
+    paddingHorizontal: 30,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    alignContent: 'flex-end',
+    gap: 30,
+  },
+  ChooseButton: {
+    backgroundColor: COLORS.primaryColor,
+    padding: 10,
+    borderRadius: 10,
+    flex: 1,
+  },
+  footerText: {
+    textAlign: 'center',
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 15,
   },
 });

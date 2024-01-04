@@ -7,6 +7,7 @@ import HomeScreen from '../screens/HomeScreen';
 // import CartScreen from '../screens/CartScreen';
 // import OrderHistoryScreen from '../screens/OrderHistoryScreen';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import SearchListScreen from 'screens/SearchListScreen';
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
@@ -41,7 +42,7 @@ const TabNavigator = () => {
       />
       <Tab.Screen
         name="Tra cứu"
-        component={HomeScreen}
+        component={SearchListScreen}
         options={{
           tabBarIcon: ({focused, color, size}) => (
             <Icon

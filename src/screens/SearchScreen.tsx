@@ -85,7 +85,11 @@ const SearchScreen = ({navigation}: any) => {
   };
   return (
     <View style={styles.ScreenContainer}>
-      <HeaderBar title="Tìm kiếm tuyến đường" navigation={navigation} />
+      <HeaderBar
+        title="Tìm kiếm tuyến đường"
+        navigation={navigation}
+        type="close"
+      />
       <View style={styles.SearchContainer}>
         <SearchInput
           onChange={value => setFrom(value)}
@@ -163,7 +167,7 @@ const SearchScreen = ({navigation}: any) => {
             gap: 5,
           }}
           renderItem={({item}) => (
-            <TouchableOpacity onPress={()=>{}}>
+            <TouchableOpacity onPress={() => {}}>
               <View style={styles.RecentItem}>
                 <Text style={styles.textItem}>{item.from.path_with_type}</Text>
                 <AntDesign name="arrowdown" size={20} />
@@ -171,7 +175,7 @@ const SearchScreen = ({navigation}: any) => {
               </View>
             </TouchableOpacity>
           )}
-            keyExtractor={(item, index) => index.toString()}
+          keyExtractor={(item, index) => index.toString()}
         />
       </View>
     </View>
@@ -274,5 +278,5 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.primaryWhite,
     borderRadius: 10,
     borderWidth: 0.5,
-  }
+  },
 });

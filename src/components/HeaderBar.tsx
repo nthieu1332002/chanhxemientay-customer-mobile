@@ -4,12 +4,15 @@ import {COLORS, FONTFAMILY} from '../theme/theme';
 // import ProfilePic from './ProfilePic';
 import Icon from 'react-native-vector-icons/AntDesign';
 
-interface HeaderBarProps {
+type TypeProps = 'close' | 'back';
+
+type Props = {
   title?: string;
   navigation: any;
-}
+  type?: TypeProps;
+};
 
-const HeaderBar: React.FC<HeaderBarProps> = ({title, navigation}) => {
+const HeaderBar = ({title, navigation, type = 'back'}: Props) => {
   return (
     <View
       style={{
@@ -22,10 +25,10 @@ const HeaderBar: React.FC<HeaderBarProps> = ({title, navigation}) => {
           navigation.pop();
         }}>
         <Icon
-          name="close"
+          name={type === 'close' ? 'close' : 'arrowleft'}
           size={16}
           style={{
-            fontSize: 24,
+            fontSize: 25,
           }}
         />
       </TouchableOpacity>
@@ -39,7 +42,7 @@ const styles = StyleSheet.create({
     fontFamily: FONTFAMILY.poppins_semibold,
     fontSize: 20,
     fontWeight: 'bold',
-    color: COLORS.primaryBlack,
+    color: COLORS.primaryColor,
     textAlign: 'center',
   },
   CloseButton: {

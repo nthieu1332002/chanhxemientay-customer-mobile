@@ -6,7 +6,8 @@ export const COLORS = {
     secondaryGray: "#f3f4f6",
     primaryBlack: "black",
     primaryBlackRGBA: 'rgba(12,15,20,0.5)',
-
+    red: '#ff0000',
+    
 };
 export const FONTFAMILY = {
     poppins_black: 'Poppins-Black',
