@@ -5,11 +5,10 @@ import {COLORS} from 'theme/theme';
 
 type Props = {
   insurance: number;
-  totalPrice: number;
   sizePrice: number;
 };
 
-const BookingPriceDetail = ({insurance, totalPrice, sizePrice}: Props) => {
+const BookingPriceDetail = ({insurance, sizePrice}: Props) => {
   return (
     <View style={styles.Container}>
       <View style={styles.Header}>
@@ -25,11 +24,11 @@ const BookingPriceDetail = ({insurance, totalPrice, sizePrice}: Props) => {
       <View>
         <View style={styles.Detail}>
           <Text style={styles.PriceName}>Giá theo khối lượng</Text>
-          <Text style={styles.text}>{new Intl.NumberFormat('en-Us').format(sizePrice)}đ</Text>
+          <Text style={styles.text}>{new Intl.NumberFormat('en-Us').format(sizePrice)} đ</Text>
         </View>
         <View style={styles.Detail}>
           <Text style={styles.PriceName}>Phí khai giá</Text>
-          <Text style={styles.text}>{new Intl.NumberFormat('en-Us').format(insurance)}đ</Text>
+          <Text style={styles.text}>{new Intl.NumberFormat('en-Us').format(insurance)} đ</Text>
         </View>
       </View>
     </View>
@@ -59,6 +58,7 @@ const styles = StyleSheet.create({
     color: COLORS.primaryBlack,
   },
   text: {
+    fontSize: 16,
     color: COLORS.primaryBlack,
   },
 });

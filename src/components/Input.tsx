@@ -13,6 +13,8 @@ type Props = {
   placeholder?: string;
   required?: boolean;
   keyboardType?: KeyboardType;
+  // min?: number;
+  // max?: number;
 };
 
 const Input = ({
@@ -25,6 +27,7 @@ const Input = ({
   placeholder,
   required,
   keyboardType,
+  // min, max,
   ...props
 }: Props) => {
   const [hidePassword, setHidePassword] = React.useState(password);

@@ -1,3 +1,6 @@
+export const phoneNumberPattern = /^[0-9]{10,11}$/;
+export const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 export const packageType = [
     { value: 0, label: 'Hàng phổ thông' },
     { value: 1, label: 'Thực phẩm' },

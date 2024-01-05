@@ -3,11 +3,9 @@ import {StyleSheet, Text} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {COLORS} from '../theme/theme';
 import HomeScreen from '../screens/HomeScreen';
-// import FavoritesScreen from '../screens/FavoritesScreen';
-// import CartScreen from '../screens/CartScreen';
-// import OrderHistoryScreen from '../screens/OrderHistoryScreen';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SearchListScreen from 'screens/SearchListScreen';
+import ProfileScreen from 'screens/ProfileScreen';
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
@@ -19,7 +17,7 @@ const TabNavigator = () => {
         tabBarStyle: styles.tabBarStyle,
       }}>
       <Tab.Screen
-        name="Trang chủ"
+        name="Home"
         component={HomeScreen}
         options={{
           tabBarIcon: ({focused, color, size}) => (
@@ -34,14 +32,13 @@ const TabNavigator = () => {
               style={{
                 color: focused ? COLORS.primaryColor : COLORS.primaryGray,
               }}>
-              {' '}
               Trang chủ
             </Text>
           ),
         }}
       />
       <Tab.Screen
-        name="Tra cứu"
+        name="Search"
         component={SearchListScreen}
         options={{
           tabBarIcon: ({focused, color, size}) => (
@@ -62,8 +59,8 @@ const TabNavigator = () => {
         }}
       />
       <Tab.Screen
-        name="Tài khoản"
-        component={HomeScreen}
+        name="Profile"
+        component={ProfileScreen}
         options={{
           tabBarIcon: ({focused, color, size}) => (
             <Icon

@@ -8,6 +8,7 @@ import SearchListScreen from 'screens/SearchListScreen';
 import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import BookingFormScreen from 'screens/BookingFormScreen';
+import BookingSuccessScreen from 'screens/BookingSuccessScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -20,19 +21,23 @@ function App(): React.JSX.Element {
             <Stack.Screen
               name="Tab"
               component={TabNavigator}
-              options={{animation: 'slide_from_bottom'}}></Stack.Screen>
+              options={{animation: 'slide_from_bottom'}}/>
             <Stack.Screen
               name="Search"
               component={SearchScreen}
-              options={{animation: 'slide_from_bottom'}}></Stack.Screen>
+              options={{animation: 'slide_from_bottom'}}/>
             <Stack.Screen
               name="SearchList"
               component={SearchListScreen}
-              options={{animation: 'slide_from_right'}}></Stack.Screen>
+              options={{animation: 'slide_from_right'}}/>
             <Stack.Screen
               name="BookingForm"
               component={BookingFormScreen}
-              options={{animation: 'slide_from_right'}}></Stack.Screen>
+              options={{animation: 'slide_from_right'}}/>
+            <Stack.Screen
+              name="BookingSuccess"
+              component={BookingSuccessScreen}
+              options={{animation: 'slide_from_right'}}/>
           </Stack.Navigator>
         </BottomSheetModalProvider>
       </NavigationContainer>

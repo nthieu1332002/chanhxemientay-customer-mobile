@@ -6,9 +6,10 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 type Props = {
   payment: number;
   setPayment: (amount: number) => void;
+  checked: boolean;
 };
 
-const PaymentOption = ({payment, setPayment}: Props) => {
+const PaymentOption = ({payment, setPayment, checked}: Props) => {
   return (
     <View style={styles.Container}>
       <TouchableOpacity
@@ -25,12 +26,14 @@ const PaymentOption = ({payment, setPayment}: Props) => {
         <Image style={styles.Logo} source={require('assets/cash.jpg')} />
       </TouchableOpacity>
       <TouchableOpacity
+        disabled={checked}
         style={[
           styles.ImageWrapper,
           {
             borderColor:
               payment === 1 ? COLORS.primaryColor : COLORS.secondaryColor,
           },
+          {backgroundColor: checked ? COLORS.primaryGray : COLORS.primaryWhite},
         ]}
         onPress={() => {
           setPayment(1);

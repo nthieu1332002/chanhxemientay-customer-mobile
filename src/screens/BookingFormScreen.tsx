@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import HeaderBar from 'components/HeaderBar';
 import Input from 'components/Input';
-import React, {useCallback, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {
   View,
   Text,
@@ -20,26 +20,48 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import BookingPriceDetail from 'components/BookingPriceDetail';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import PaymentOption from 'components/PaymentOption';
+import {emailPattern, phoneNumberPattern} from 'data/constants';
+import qs from 'query-string';
+import axios from 'lib/axios';
+import {debounce} from 'lib/debounce';
+
 type FieldType = {
-  email: string;
-  fullname: string;
-  phone: string;
-  password: string;
+  sender_name: string;
+  sender_phone: string;
+  sender_email: string;
+  receiver_name: string;
+  receiver_phone: string;
+  receiver_email: string;
+  weight: number;
+  height: number;
+  length: number;
+  width: number;
+  package_value: number; // giá trị hàng hóa
+  note: string;
+  package_types: number[];
+  payment_method: number;
+  collect_on_delivery: boolean;
+};
+type ErrorType = {
+  sender_name: string;
+  sender_phone: string;
+  sender_email: string;
+  receiver_name: string;
+  receiver_phone: string;
+  receiver_email: string;
+  package_size: string;
+  package_value: string;
+  weight: string;
 };
 const {height: SCREEN_HEIGHT} = Dimensions.get('window');
 const MIN_INSURANCE = 1000000;
 const PERCENT_INSURANCE = 0.005;
 const BookingFormScreen = ({navigation, route}: any) => {
   const {item} = route.params;
-  const [inputs, setInputs] = useState<FieldType>({
-    email: '',
-    fullname: '',
-    phone: '',
-    password: '',
-  });
+  const [inputs, setInputs] = useState<FieldType>();
   const [payment, setPayment] = useState(0);
   const [checked, setChecked] = useState(false);
-  const [errors, setErrors] = useState<FieldType>();
+  const [errors, setErrors] = useState<ErrorType>();
   const [loading, setLoading] = useState(false);
 
   const priceDetailRef = useRef<BottomSheet>(null);
@@ -50,71 +72,154 @@ const BookingFormScreen = ({navigation, route}: any) => {
   const [insurance, setInsurance] = useState(0);
   const [sizePrice, setSizePrice] = useState(0);
   const totalPrice = insurance + sizePrice;
+  const snapPoints = useMemo(
+    () => [135 + bottomSafeArea, '35%', '100%'],
+    [bottomSafeArea],
+  );
 
   const onChange = useCallback((value: number) => {
     setInsurance(
       value >= MIN_INSURANCE ? Math.round(value * PERCENT_INSURANCE) : 0,
     );
   }, []);
-  const snapPoints = useMemo(
-    () => [135 + bottomSafeArea, '35%', '100%'],
-    [bottomSafeArea],
-  );
-
-  const validate = () => {
-    Keyboard.dismiss();
-    let isValid = true;
-
-    if (!inputs.email) {
-      handleError('Please input email', 'email');
-      isValid = false;
-    } else if (!inputs.email.match(/\S+@\S+\.\S+/)) {
-      handleError('Please input a valid email', 'email');
-      isValid = false;
-    }
-
-    if (!inputs.fullname) {
-      handleError('Please input fullname', 'fullname');
-      isValid = false;
-    }
-
-    if (!inputs.phone) {
-      handleError('Please input phone number', 'phone');
-      isValid = false;
-    }
-
-    if (!inputs.password) {
-      handleError('Please input password', 'password');
-      isValid = false;
-    } else if (inputs.password.length < 5) {
-      handleError('Min password length of 5', 'password');
-      isValid = false;
-    }
-
-    if (isValid) {
-      register();
-    }
-  };
-
-  const register = () => {
-    // setLoading(true);
-    // setTimeout(() => {
-    //   try {
-    //     setLoading(false);
-    //     AsyncStorage.setItem('userData', JSON.stringify(inputs));
-    //     navigation.navigate('LoginScreen');
-    //   } catch (error) {
-    //     Alert.alert('Error', 'Something went wrong');
-    //   }
-    // }, 3000);
-  };
 
   const handleOnchange = (text: any, input: string) => {
-    setInputs(prevState => ({...prevState, [input]: text}));
+    setInputs(prevState => ({...prevState, [input]: text} as FieldType));
   };
   const handleError = (error: string | null, input: string) => {
-    setErrors(prevState => ({...prevState, [input]: error} as FieldType));
+    setErrors((prevState: any) => ({...prevState, [input]: error}));
   };
+
+  useEffect(() => {
+    const fetchPrice = debounce(async () => {
+      try {
+        setLoading(true);
+        if (
+          inputs?.length &&
+          inputs?.width &&
+          inputs?.height &&
+          inputs?.weight
+        ) {
+          const url = qs.stringifyUrl({
+            url: '/package-price',
+            query: {
+              height: inputs?.height * 10,
+              width: inputs?.width * 10,
+              length: inputs?.length * 10,
+              weight: inputs?.weight * 1000,
+              distance: item.total_distance,
+            },
+          });
+          const res = await axios.get(url);
+          setSizePrice(res.data.data.total_price);
+        }
+      } catch (error: any) {
+        console.log('error', error.response.data.message);
+        handleError(error.response.data.message, 'package_size');
+      } finally {
+        setLoading(false);
+      }
+    });
+    fetchPrice();
+  }, [
+    inputs?.height,
+    inputs?.length,
+    inputs?.weight,
+    inputs?.width,
+    item.total_distance,
+  ]);
+
+  const handleSubmit = useCallback(
+    async (values: FieldType) => {
+      try {
+        setLoading(true);
+        const data = {
+          ...inputs,
+          height: values.height * 10,
+          width: values.width * 10,
+          length: values.length * 10,
+          weight: values.weight * 1000,
+          order_route_id: item.id,
+          collect_on_delivery: checked,
+          package_types: item.acceptable_package_types,
+          payment_method: payment,
+        };
+        const res = await axios.post('/orders', data);
+
+        if (res.data.data) {
+          navigation.replace('BookingSuccess', {
+            code: res.data.data.code,
+            email: res.data.data.email,
+          });
+        }
+      } catch (error) {
+        console.log('Có lỗi xảy ra, tạo đơn hàng thất bại!', error);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [
+      checked,
+      inputs,
+      item.acceptable_package_types,
+      item.id,
+      navigation,
+      payment,
+    ],
+  );
+
+  const validate = useCallback(() => {
+    Keyboard.dismiss();
+    let isValid = true;
+    if (!inputs?.sender_name) {
+      handleError('Họ và tên không được bỏ trống.', 'sender_name');
+      isValid = false;
+    }
+    if (!inputs?.sender_email) {
+      handleError('Email không được bỏ trống.', 'sender_email');
+      isValid = false;
+    } else if (!inputs?.sender_email.match(emailPattern)) {
+      handleError('Email không đúng định dạng.', 'sender_email');
+      isValid = false;
+    }
+    if (!inputs?.sender_phone) {
+      handleError('Số điện thoại không được bỏ trống.', 'sender_phone');
+      isValid = false;
+    } else if (!inputs?.sender_phone.match(phoneNumberPattern)) {
+      handleError('Số điện thoại không đúng định dạng.', 'sender_phone');
+      isValid = false;
+    }
+
+    if (!inputs?.receiver_name) {
+      handleError('Họ và tên không được bỏ trống.', 'receiver_name');
+      isValid = false;
+    }
+    if (!inputs?.receiver_email) {
+      handleError('Email không được bỏ trống.', 'receiver_email');
+      isValid = false;
+    } else if (!inputs?.receiver_email.match(emailPattern)) {
+      handleError('Email không đúng định dạng.', 'receiver_email');
+      isValid = false;
+    }
+    if (!inputs?.receiver_phone) {
+      handleError('Số điện thoại không được bỏ trống.', 'receiver_phone');
+      isValid = false;
+    } else if (!inputs?.receiver_phone.match(phoneNumberPattern)) {
+      handleError('Số điện thoại không đúng định dạng.', 'receiver_phone');
+      isValid = false;
+    }
+    if (!inputs?.weight) {
+      handleError('Khối lượng không được bỏ trống.', 'weight');
+      isValid = false;
+    }
+    if (!inputs?.package_value) {
+      handleError('Giá trị không được bỏ trống.', 'package_value');
+      isValid = false;
+    }
+    if (isValid && inputs) {
+      handleSubmit(inputs);
+    }
+  }, [inputs, handleSubmit]);
 
   const renderFooter = useCallback(
     (props: any) => (
@@ -126,15 +231,14 @@ const BookingFormScreen = ({navigation, route}: any) => {
               style={{
                 color: COLORS.primaryColor,
                 fontWeight: 'bold',
-                fontSize: 17,
+                fontSize: 18,
               }}>
-              {new Intl.NumberFormat('en-Us').format(totalPrice)}đ
+              {new Intl.NumberFormat('en-Us').format(totalPrice)} đ
             </Text>
           </View>
           <TouchableOpacity
-            onPress={() => {
-              priceDetailRef.current?.close();
-            }}
+            disabled={loading}
+            onPress={validate}
             style={{
               backgroundColor: COLORS.primaryColor,
               paddingVertical: 10,
@@ -148,7 +252,7 @@ const BookingFormScreen = ({navigation, route}: any) => {
         </View>
       </BottomSheetFooter>
     ),
-    [totalPrice],
+    [totalPrice, loading, validate],
   );
   return (
     <View
@@ -165,74 +269,80 @@ const BookingFormScreen = ({navigation, route}: any) => {
         <View style={styles.Section}>
           <Input
             required
-            onChangeText={(text: any) => handleOnchange(text, 'fullname')}
-            onFocus={() => handleError(null, 'fullname')}
+            onChangeText={(text: any) => handleOnchange(text, 'sender_name')}
+            onFocus={() => handleError(null, 'sender_name')}
             iconName="account-outline"
             label="Họ và tên"
             placeholder="Họ và tên người gửi"
-            error={errors?.fullname}
+            error={errors?.sender_name}
           />
           <Input
             required
-            // keyboardType="numeric"
-            onChangeText={(text: any) => handleOnchange(text, 'phone')}
-            onFocus={() => handleError(null, 'phone')}
+            onChangeText={(text: string) =>
+              handleOnchange(text, 'sender_email')
+            }
+            onFocus={() => handleError(null, 'sender_email')}
+            iconName="email-outline"
+            label="Email"
+            placeholder="Nhập email"
+            error={errors?.sender_email}
+          />
+          <Input
+            required
+            keyboardType="numeric"
+            onChangeText={(text: any) => handleOnchange(text, 'sender_phone')}
+            onFocus={() => handleError(null, 'sender_phone')}
             iconName="phone-outline"
             label="Số điện thoại"
             placeholder="Nhập số điện thoại"
-            error={errors?.phone}
-          />
-          <Input
-            required
-            onChangeText={(text: string) => handleOnchange(text, 'email')}
-            onFocus={() => handleError(null, 'email')}
-            iconName="email-outline"
-            label="Email"
-            placeholder="Enter your email address"
-            error={errors?.email}
+            error={errors?.sender_phone}
           />
         </View>
         <Text style={styles.SectionTitle}>Thông tin người nhận</Text>
         <View style={styles.Section}>
           <Input
             required
-            onChangeText={(text: any) => handleOnchange(text, 'fullname')}
-            onFocus={() => handleError(null, 'fullname')}
+            onChangeText={(text: any) => handleOnchange(text, 'receiver_name')}
+            onFocus={() => handleError(null, 'receiver_name')}
             iconName="account-outline"
             label="Họ và tên"
             placeholder="Họ và tên người nhận"
-            error={errors?.fullname}
+            error={errors?.receiver_name}
           />
           <Input
-            // keyboardType="numeric"
             required
-            onChangeText={(text: any) => handleOnchange(text, 'phone')}
-            onFocus={() => handleError(null, 'phone')}
+            onChangeText={(text: string) =>
+              handleOnchange(text, 'receiver_email')
+            }
+            onFocus={() => handleError(null, 'receiver_email')}
+            iconName="email-outline"
+            label="Email"
+            placeholder="Nhập email"
+            error={errors?.receiver_email}
+          />
+          <Input
+            keyboardType="numeric"
+            required
+            onChangeText={(text: any) => handleOnchange(text, 'receiver_phone')}
+            onFocus={() => handleError(null, 'receiver_phone')}
             iconName="phone-outline"
             label="Số điện thoại"
             placeholder="Nhập số điện thoại"
-            error={errors?.phone}
-          />
-          <Input
-            required
-            onChangeText={(text: string) => handleOnchange(text, 'email')}
-            onFocus={() => handleError(null, 'email')}
-            iconName="email-outline"
-            label="Email"
-            placeholder="Enter your email address"
-            error={errors?.email}
+            error={errors?.receiver_phone}
           />
         </View>
         <Text style={styles.SectionTitle}>Thông tin gói hàng</Text>
         <View style={styles.Section}>
           <Input
             required
-            onChangeText={(text: any) => handleOnchange(text, 'fullname')}
-            onFocus={() => handleError(null, 'fullname')}
-            iconName="account-outline"
+            keyboardType="numeric"
+            onChangeText={(text: any) => handleOnchange(text, 'weight')}
+            onFocus={() => handleError(null, 'weight')}
             label="Tổng khối lượng (kg)"
-            placeholder="Tổng khối lượng"
-            error={errors?.fullname}
+            placeholder="0"
+            error={errors?.weight}
+            // min={0}
+            // max={50}
           />
           <Text style={{color: COLORS.primaryBlack}}>
             Kích thước (cm) <Text style={{color: COLORS.red}}>*</Text>
@@ -241,48 +351,57 @@ const BookingFormScreen = ({navigation, route}: any) => {
             <View style={{width: '30%'}}>
               <Input
                 keyboardType="numeric"
-                onChangeText={(text: any) => handleOnchange(text, 'phone')}
-                onFocus={() => handleError(null, 'phone')}
+                onChangeText={(text: any) => handleOnchange(text, 'length')}
+                onFocus={() => handleError(null, 'length')}
                 placeholder="10"
-                error={errors?.phone}
               />
             </View>
             <View style={{width: '30%'}}>
               <Input
                 keyboardType="numeric"
-                onChangeText={(text: any) => handleOnchange(text, 'phone')}
-                onFocus={() => handleError(null, 'phone')}
+                onChangeText={(text: any) => handleOnchange(text, 'width')}
+                onFocus={() => handleError(null, 'width')}
                 placeholder="10"
-                error={errors?.phone}
               />
             </View>
             <View style={{width: '30%'}}>
               <Input
                 keyboardType="numeric"
-                onChangeText={(text: any) => handleOnchange(text, 'phone')}
-                onFocus={() => handleError(null, 'phone')}
+                onChangeText={(text: any) => handleOnchange(text, 'height')}
+                onFocus={() => handleError(null, 'height')}
                 placeholder="10"
-                error={errors?.phone}
               />
             </View>
           </View>
+          {errors?.package_size && (
+            <Text style={{marginTop: 7, color: COLORS.red, fontSize: 12}}>
+              {errors?.package_size}
+            </Text>
+          )}
           <Input
-            onChangeText={(text: any) => handleOnchange(text, 'fullname')}
-            onFocus={() => handleError(null, 'fullname')}
+            required
+            keyboardType="numeric"
+            onChangeText={(text: any) => {
+              handleOnchange(text, 'package_value');
+              onChange(text);
+            }}
+            onFocus={() => handleError(null, 'package_value')}
             label="Tổng giá trị hàng hóa - VND"
             placeholder="0"
-            error={errors?.fullname}
+            error={errors?.package_value}
           />
           <Input
-            onChangeText={(text: any) => handleOnchange(text, 'fullname')}
-            onFocus={() => handleError(null, 'fullname')}
+            onChangeText={(text: any) => handleOnchange(text, 'note')}
+            onFocus={() => handleError(null, 'note')}
             label="Ghi chú"
             placeholder="VD: Hàng dễ vỡ."
-            error={errors?.fullname}
           />
           <Text style={{color: COLORS.primaryBlack}}>Tùy chọn thanh toán</Text>
           <BouncyCheckbox
-            onPress={(isChecked: boolean) => setChecked(isChecked)}
+            onPress={(isChecked: boolean) => {
+              setChecked(isChecked);
+              setPayment(0);
+            }}
             text="Bên nhận trả phí?"
             size={20}
             fillColor={COLORS.primaryColor}
@@ -293,7 +412,11 @@ const BookingFormScreen = ({navigation, route}: any) => {
         </View>
         <Text style={styles.SectionTitle}>Phương thức thanh toán</Text>
         <View style={styles.Section}>
-          <PaymentOption payment={payment} setPayment={setPayment}/>
+          <PaymentOption
+            payment={payment}
+            setPayment={setPayment}
+            checked={checked}
+          />
         </View>
       </ScrollView>
       <BottomSheet
@@ -307,11 +430,7 @@ const BookingFormScreen = ({navigation, route}: any) => {
         animatedPosition={animatedRouteDetailPosition}
         footerComponent={renderFooter}>
         <View>
-          <BookingPriceDetail
-            insurance={insurance}
-            sizePrice={sizePrice}
-            totalPrice={totalPrice}
-          />
+          <BookingPriceDetail insurance={insurance} sizePrice={sizePrice} />
         </View>
       </BottomSheet>
     </View>
