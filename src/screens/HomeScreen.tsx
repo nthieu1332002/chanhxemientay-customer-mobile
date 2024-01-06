@@ -36,6 +36,20 @@ const HomeScreen = ({navigation}: any) => {
             Tìm chuyến xe...
           </Text>
         </TouchableOpacity>
+        <Text
+          style={{
+            fontSize: 16,
+            paddingLeft: 10,
+          }}>
+         Tìm kiếm gần đây
+        </Text>
+        <Text
+          style={{
+            fontSize: 16,
+            paddingLeft: 10,
+          }}>
+          Nhà xe
+        </Text>
       </ScrollView>
     </View>
   );

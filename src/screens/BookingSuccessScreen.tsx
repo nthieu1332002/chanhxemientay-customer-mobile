@@ -11,7 +11,7 @@ const BookingSuccessScreen = ({navigation, route}: any) => {
       <View style={styles.Content}>
         <LottieView
           style={styles.LottieView}
-          source={require('assets/animation/success.lottie')}
+          source={require('assets/animation/success.json')}
           autoPlay
           loop={false}
         />

@@ -1,5 +1,6 @@
 import Axios from 'axios';
 import {BACKEND_API} from '@env';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const axios = Axios.create({
   baseURL: BACKEND_API,
@@ -13,7 +14,8 @@ axios.interceptors.request.use(
   async (config) => {
     try {
 
-      const accessToken = await getAccessToken();
+      const accessToken = await AsyncStorage.getItem('ACCESS_TOKEN');
+
       if (accessToken) {
         config.headers.Authorization = `Bearer ${accessToken}`;
       }
@@ -36,8 +38,5 @@ axios.interceptors.response.use(
   }
 );
 
-const getAccessToken = async () => {
-  return 'YOUR_ACCESS_TOKEN';
-};
 
 export default axios;
