@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {Image, StatusBar, StyleSheet, Text, View} from 'react-native';
 import React, {useState} from 'react';
 import AuthHeader from 'components/AuthHeader';
 import {COLORS} from 'theme/theme';
@@ -8,11 +8,13 @@ import InputAuth from 'components/InputAuth';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useAuth} from 'context/AuthContext';
 import {useToast} from 'react-native-toast-notifications';
+import {SCREEN_HEIGHT, SCREEN_WIDTH} from 'lib/Dimensions';
 
 const LoginScreen = ({navigation}: any) => {
-  const {login} = useAuth();
+  const {login, isLoading} = useAuth();
   const toast = useToast();
   const [show, setShow] = useState(false);
+
   const [indentifier, setIndentifier] = useState<string>();
   const [password, setPassword] = useState<string>();
   const validate = async () => {
@@ -22,7 +24,7 @@ const LoginScreen = ({navigation}: any) => {
       });
       return;
     }
-    const res = await login!(indentifier, password);
+    const res = await login(indentifier, password);
     if (res.error) {
       toast.show(res.msg, {type: 'danger'});
     } else {
@@ -31,6 +33,8 @@ const LoginScreen = ({navigation}: any) => {
   };
   return (
     <View style={styles.Container}>
+      <StatusBar backgroundColor={COLORS.primaryColor} />
+
       <AuthHeader
         title="Chào mừng quay lại"
         info="Đăng nhập vào tài khoản của bạn"
@@ -78,9 +82,13 @@ const LoginScreen = ({navigation}: any) => {
         />
       </View>
       <TouchableOpacity
+        disabled={isLoading || (!indentifier && !password)}
         onPress={validate}
         style={{
-          backgroundColor: COLORS.primaryColor,
+          backgroundColor:
+            indentifier && password
+              ? COLORS.primaryColor
+              : COLORS.secondaryGray,
           padding: 13,
           borderRadius: 10,
           marginTop: 30,
@@ -104,6 +112,12 @@ const LoginScreen = ({navigation}: any) => {
           </Text>
         </Text>
       </TouchableOpacity>
+      <View style={styles.Circle}>
+        <Image
+          source={require('assets/welcome.png')}
+          style={{width: 200, height: 200}}
+        />
+      </View>
     </View>
   );
 };
@@ -118,5 +132,9 @@ const styles = StyleSheet.create({
   },
   Body: {
     gap: 20,
+  },
+  Circle: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

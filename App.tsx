@@ -14,64 +14,25 @@ import LoginScreen from 'screens/LoginScreen';
 import RegisterScreen from 'screens/RegisterScreen';
 import {ToastProvider} from 'react-native-toast-notifications';
 import {useEffect} from 'react';
+import SplashScreen from 'react-native-splash-screen';
+import {ActivityIndicator, View} from 'react-native';
+import {COLORS} from 'theme/theme';
+import WelcomeScreen from 'screens/WelcomeScreen';
+
 const Stack = createNativeStackNavigator();
 
 function App(): React.JSX.Element {
-  const {accessToken} = useAuth();
-  // useEffect(() => {
-
-  // }, []);
+  useEffect(() => {
+    SplashScreen.hide();
+  }, []);
 
   return (
     <AuthProvider>
       <GestureHandlerRootView style={{flex: 1}}>
         <ToastProvider>
-          <NavigationContainer>
-            <BottomSheetModalProvider>
-              {accessToken ? (
-                <Stack.Navigator screenOptions={{headerShown: false}}>
-                  <Stack.Screen
-                    name="Tab"
-                    component={TabNavigator}
-                    options={{animation: 'slide_from_bottom'}}
-                  />
-                  <Stack.Screen
-                    name="Search"
-                    component={SearchScreen}
-                    options={{animation: 'slide_from_bottom'}}
-                  />
-                  <Stack.Screen
-                    name="SearchList"
-                    component={SearchListScreen}
-                    options={{animation: 'slide_from_right'}}
-                  />
-                  <Stack.Screen
-                    name="BookingForm"
-                    component={BookingFormScreen}
-                    options={{animation: 'slide_from_right'}}
-                  />
-                  <Stack.Screen
-                    name="BookingSuccess"
-                    component={BookingSuccessScreen}
-                    options={{animation: 'slide_from_right'}}
-                  />
-                </Stack.Navigator>
-              ) : (
-                <Stack.Navigator screenOptions={{headerShown: false}}>
-                  <Stack.Screen
-                    name="Login"
-                    component={LoginScreen}
-                    options={{animation: 'slide_from_left'}}
-                  />
-                  <Stack.Screen
-                    name="Register"
-                    component={RegisterScreen}
-                    options={{animation: 'slide_from_right'}}
-                  />
-                </Stack.Navigator>
-              )}
-            </BottomSheetModalProvider>
-          </NavigationContainer>
+          <BottomSheetModalProvider>
+            <Layout />
+          </BottomSheetModalProvider>
         </ToastProvider>
       </GestureHandlerRootView>
     </AuthProvider>
@@ -79,3 +40,61 @@ function App(): React.JSX.Element {
 }
 
 export default App;
+
+export const Layout = () => {
+  const {accessToken, isLoading} = useAuth();
+  if (isLoading) {
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <ActivityIndicator size="large" color={COLORS.primaryColor} />
+      </View>
+    );
+  }
+  return (
+    <NavigationContainer>
+      {accessToken ? (
+        <Stack.Navigator screenOptions={{headerShown: false}}>
+          <Stack.Screen
+            name="Tab"
+            component={TabNavigator}
+            options={{animation: 'slide_from_bottom'}}
+          />
+          <Stack.Screen
+            name="Search"
+            component={SearchScreen}
+            options={{animation: 'slide_from_bottom'}}
+          />
+          <Stack.Screen
+            name="SearchList"
+            component={SearchListScreen}
+            options={{animation: 'slide_from_right'}}
+          />
+          <Stack.Screen
+            name="BookingForm"
+            component={BookingFormScreen}
+            options={{animation: 'slide_from_right'}}
+          />
+          <Stack.Screen
+            name="BookingSuccess"
+            component={BookingSuccessScreen}
+            options={{animation: 'slide_from_right'}}
+          />
+        </Stack.Navigator>
+      ) : (
+        <Stack.Navigator screenOptions={{headerShown: false}}>
+          <Stack.Screen name="Welcome" component={WelcomeScreen} />
+          <Stack.Screen
+            name="Login"
+            component={LoginScreen}
+            options={{animation: 'slide_from_right'}}
+          />
+          <Stack.Screen
+            name="Register"
+            component={RegisterScreen}
+            options={{animation: 'slide_from_right'}}
+          />
+        </Stack.Navigator>
+      )}
+    </NavigationContainer>
+  );
+};

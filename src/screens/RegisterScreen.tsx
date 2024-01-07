@@ -1,4 +1,4 @@
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {ScrollView, StatusBar, StyleSheet, Text, View} from 'react-native';
 import React, {useState} from 'react';
 import AuthHeader from 'components/AuthHeader';
 import {COLORS} from 'theme/theme';
@@ -14,10 +14,10 @@ const RegisterScreen = ({navigation}: any) => {
   const {register} = useAuth();
   const toast = useToast();
   const [show, setShow] = useState(false);
-  const [name, setName] = useState<string>('');
-  const [phone, setPhone] = useState<string>('');
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
+  const [name, setName] = useState<string>();
+  const [phone, setPhone] = useState<string>();
+  const [email, setEmail] = useState<string>();
+  const [password, setPassword] = useState<string>();
   const validate = async () => {
     if (!name || !phone || !email || !password) {
       toast.show('Vui lòng điền đầy đủ thông tin!', {
@@ -25,7 +25,7 @@ const RegisterScreen = ({navigation}: any) => {
       });
       return;
     }
-    const res = await register!(name, phone, email, password);
+    const res = await register(name, phone, email, password);
     if (res.error) {
       toast.show(res.msg, {type: 'danger'});
     } else {
@@ -34,6 +34,8 @@ const RegisterScreen = ({navigation}: any) => {
   };
   return (
     <View style={styles.Container}>
+      <StatusBar backgroundColor={COLORS.primaryColor} />
+
       <ScrollView showsVerticalScrollIndicator={false}>
         <AuthHeader title="Bắt đầu ngay" info="Tạo tài khoản của bạn" />
         <View style={styles.Body}>
@@ -47,7 +49,6 @@ const RegisterScreen = ({navigation}: any) => {
                 style={{marginRight: 5}}
               />
             }
-            keyboardType="email-address"
             value={name}
             onChangeText={(text: string) => setName(text)}
           />
@@ -61,7 +62,7 @@ const RegisterScreen = ({navigation}: any) => {
                 style={{marginRight: 5}}
               />
             }
-            keyboardType="email-address"
+            keyboardType="numeric"
             value={phone}
             onChangeText={(text: string) => setPhone(text)}
           />
@@ -104,9 +105,13 @@ const RegisterScreen = ({navigation}: any) => {
           />
         </View>
         <TouchableOpacity
+          disabled={!name && !phone && !email && !password}
           onPress={validate}
           style={{
-            backgroundColor: COLORS.primaryColor,
+            backgroundColor:
+              name && phone && email && password
+                ? COLORS.primaryColor
+                : COLORS.secondaryGray,
             padding: 13,
             borderRadius: 10,
             marginTop: 30,

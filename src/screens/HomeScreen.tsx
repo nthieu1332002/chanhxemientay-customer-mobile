@@ -10,46 +10,52 @@ import {
 import React from 'react';
 import {COLORS} from 'theme/theme';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {useAuth} from 'context/AuthContext';
+import Avatar from 'components/Avatar';
+import SaleSection from 'components/SaleSection';
 
 const HomeScreen = ({navigation}: any) => {
+  const {logout} = useAuth();
   return (
     <View style={styles.ScreenContainer}>
       <StatusBar backgroundColor={COLORS.primaryColor} />
+      <View style={styles.Header}>
+        <Text style={styles.HeaderText}>Xin chào <Text style={{color: COLORS.primaryBlack}}>Trung Hiếu!</Text></Text>
+        <Avatar/>
+      </View>
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.ScrollViewFlex}>
-        <Text style={styles.ScreenTitle}>
-          Đặt chành xe với ChanhXe
-          <Text style={{color: COLORS.primaryColor}}>MienTay</Text>
-        </Text>
-        <TouchableOpacity
-          style={styles.InputContainerComponent}
-          onPress={() => {
-            navigation.push('Search');
-          }}>
-          <Icon name="search" size={16} />
-          <Text
-            style={{
-              fontSize: 16,
-              paddingLeft: 10,
-            }}>
-            Tìm chuyến xe...
+        <View style={styles.Body}>
+          <Text style={styles.ScreenTitle}>
+            Đặt chành xe với ChanhXe
+            <Text style={{color: COLORS.primaryColor}}>MienTay</Text>
           </Text>
-        </TouchableOpacity>
-        <Text
-          style={{
-            fontSize: 16,
-            paddingLeft: 10,
-          }}>
-         Tìm kiếm gần đây
-        </Text>
-        <Text
-          style={{
-            fontSize: 16,
-            paddingLeft: 10,
-          }}>
-          Nhà xe
-        </Text>
+          <TouchableOpacity
+            style={styles.InputContainerComponent}
+            onPress={() => {
+              // navigation.push('Search');
+              logout();
+            }}>
+            <Icon name="search" size={16} />
+            <Text
+              style={{
+                fontSize: 16,
+                paddingLeft: 10,
+              }}>
+              Tìm chuyến xe...
+            </Text>
+          </TouchableOpacity>
+            <SaleSection/>
+        </View>
+          <Text
+            style={styles.SectionTittle}>
+            Tìm kiếm gần đây
+          </Text>
+          <Text
+            style={styles.SectionTittle}>
+            Nhà xe
+          </Text>
       </ScrollView>
     </View>
   );
@@ -61,25 +67,40 @@ const styles = StyleSheet.create({
   ScreenContainer: {
     flex: 1,
     backgroundColor: COLORS.primaryWhite,
+    padding: 20,
+  },
+  Header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  HeaderText: {
+    fontSize: 17,
+    fontWeight: '500',
   },
   ScrollViewFlex: {
     flexGrow: 1,
-    paddingVertical: 0,
+  },
+  Body: {
+    gap: 20,
   },
   ScreenTitle: {
     fontSize: 28,
-    // fontFamily: FONTFAMILY.poppins_semibold,
     fontWeight: 'bold',
     color: COLORS.primaryBlack,
-    padding: 30,
+    marginTop: 10,
   },
   InputContainerComponent: {
     flexDirection: 'row',
-    marginHorizontal: 30,
     paddingLeft: 20,
     paddingVertical: 15,
     borderRadius: 15,
     backgroundColor: COLORS.secondaryGray,
     alignItems: 'center',
   },
+  SectionTittle: {
+    color: COLORS.primaryBlack,
+    fontSize: 21,
+    fontWeight: 'bold',
+  }
 });

@@ -7,7 +7,7 @@ export const COLORS = {
     primaryBlack: "black",
     primaryBlackRGBA: 'rgba(12,15,20,0.5)',
     red: '#ff0000',
-    
+    whiteOpacity: 'rgba(241,243,244, 0.5)'
 };
 export const FONTFAMILY = {
     poppins_black: 'Poppins-Black',

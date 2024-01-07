@@ -14,19 +14,23 @@ type UserInfoProps = {
 type AuthProps = {
   accessToken?: string;
   userInfo?: UserInfoProps;
-  login?: (email: string, password: string) => Promise<any>;
-  register?: (
+  login: (email: string, password: string) => Promise<any>;
+  register: (
     name: string,
     phone: string,
     email: string,
     password: string,
   ) => Promise<any>;
 
-  logout?: () => void;
+  logout: () => void;
   isLoading?: boolean;
 };
 
-const AuthContext = createContext<AuthProps>({});
+const AuthContext = createContext<AuthProps>({
+  login: async () => {},
+  register: async () => {},
+  logout: () => {},
+});
 
 export const useAuth = () => {
   return useContext(AuthContext);
@@ -35,17 +39,20 @@ export const AuthProvider = ({children}: any) => {
   const [isLoading, setIsLoading] = useState(false);
   const [accessToken, setAccessToken] = useState<string>();
   const [userInfo, setUserInfo] = useState<UserInfoProps>();
-
-  const login = async (email: string, password: string) => {
+  console.log("accessToken context", accessToken);
+  console.log("userInfo context", userInfo);
+  const login = async (indentifier: string, password: string) => {
     try {
       setIsLoading(true);
       const res = await axios.post('/login/token', {
-        email,
-        password,
+        indentifier: indentifier,
+        password: password,
         device_name: 'customer_mobile',
       });
       const access_token = res.data.data.access_token;
       const user = res.data.data.customer;
+      console.log(accessToken);
+      console.log(user);
       setUserInfo(user);
       setAccessToken(access_token);
 
@@ -90,13 +97,14 @@ export const AuthProvider = ({children}: any) => {
   };
   const logout = () => {
     setIsLoading(false);
-    setAccessToken('');
+    setAccessToken(undefined);
     AsyncStorage.removeItem('USER_INFO');
     AsyncStorage.removeItem('ACCESS_TOKEN');
     setIsLoading(true);
   };
   useEffect(() => {
     const isLoggedIn = async () => {
+      console.log('check is login');
       try {
         setIsLoading(true);
 
@@ -104,6 +112,7 @@ export const AuthProvider = ({children}: any) => {
         const token = await AsyncStorage.getItem('ACCESS_TOKEN');
 
         if (user && token) {
+          console.log('co');
           setUserInfo(JSON.parse(user));
           setAccessToken(token);
         }
