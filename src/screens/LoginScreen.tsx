@@ -8,7 +8,6 @@ import InputAuth from 'components/InputAuth';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useAuth} from 'context/AuthContext';
 import {useToast} from 'react-native-toast-notifications';
-import {SCREEN_HEIGHT, SCREEN_WIDTH} from 'lib/Dimensions';
 
 const LoginScreen = ({navigation}: any) => {
   const {login, isLoading} = useAuth();

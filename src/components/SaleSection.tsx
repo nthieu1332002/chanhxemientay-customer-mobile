@@ -7,7 +7,7 @@ const SaleSection = () => {
       <Image
         style={styles.Logo}
         source={require('assets/offer.png')}
-        resizeMode="contain"
+        resizeMode="cover"
       />
     </View>
   );
@@ -16,15 +16,14 @@ const SaleSection = () => {
 export default SaleSection;
 
 const styles = StyleSheet.create({
+  Container: {
+    height: 150,
+    borderRadius: 20,
+    width: '100%',
+    overflow: 'hidden',
+  },
   Logo: {
     height: '100%',
-  },
-  Container: {
-    height: 170,
-    borderRadius: 30,
-    overflow: 'hidden',
-    backgroundColor: 'red',
-    alignItems: 'center',
-    justifyContent: 'center',
+    width: '100%',
   },
 });

@@ -1,15 +1,19 @@
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
-import { COLORS } from 'theme/theme';
+import {COLORS} from 'theme/theme';
+import { useAuth } from 'context/AuthContext';
 
 const Avatar = () => {
+  const {logout} = useAuth();
   return (
-    <View style={styles.Circle}>
-      <Image
-        source={require('assets/welcome.png')}
-        style={{width: 35, height: 35}}
-      />
-    </View>
+    <Pressable onPress={logout}>
+      <View style={styles.Circle}>
+        <Image
+          source={require('assets/welcome.png')}
+          style={{width: 35, height: 35}}
+        />
+      </View>
+    </Pressable>
   );
 };
 

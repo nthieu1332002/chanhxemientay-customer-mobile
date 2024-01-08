@@ -1,12 +1,5 @@
-import {
-  Alert,
-  FlatList,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import {Alert, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React, {useState} from 'react';
 import HeaderBar from 'components/HeaderBar';
 import SearchInput from 'components/SearchInput';
 import {COLORS} from 'theme/theme';
@@ -14,6 +7,8 @@ import {LocationType, packageType} from 'data/constants';
 import {MultiSelect} from 'react-native-element-dropdown';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import RecentSearch from './RecentSearch';
+import { useToast } from 'react-native-toast-notifications';
 const MAX_ARRAY_LENGTH = 5;
 
 export const addRecentSearch = async (key: string, object: any) => {
@@ -32,15 +27,7 @@ export const addRecentSearch = async (key: string, object: any) => {
     console.error('Error adding object to array:', error);
   }
 };
-export const getRecentSearch = async (key: string) => {
-  try {
-    const array = await AsyncStorage.getItem(key);
-    return array ? JSON.parse(array) : [];
-  } catch (error) {
-    console.error('Error getting array:', error);
-    return [];
-  }
-};
+
 const SearchScreen = ({navigation}: any) => {
   const initialValue = {
     code: '',
@@ -50,15 +37,8 @@ const SearchScreen = ({navigation}: any) => {
   const [from, setFrom] = useState<LocationType>(initialValue);
   const [to, setTo] = useState<LocationType>(initialValue);
   const [selected, setSelected] = useState<string[]>([]);
-  const [recent, setRecent] = useState<any>([]);
+  const toast = useToast();
 
-  useEffect(() => {
-    const fetRecentSearch = async () => {
-      const a = await getRecentSearch('search');
-      setRecent(a.reverse());
-    };
-    fetRecentSearch();
-  }, []);
   const renderItem = (item: any) => {
     return (
       <View style={styles.item}>
@@ -68,7 +48,7 @@ const SearchScreen = ({navigation}: any) => {
   };
   const handleSearch = async () => {
     if (from.code === '' || to.code === '' || selected.length === 0) {
-      Alert.alert('Thông báo', 'Vui lòng nhập đầy đủ thông tin');
+      toast.show('Vui lòng nhập đầy đủ thông tin', {type: 'danger'});
     } else {
       const data = {
         from: from,
@@ -150,34 +130,7 @@ const SearchScreen = ({navigation}: any) => {
           Tìm kiếm
         </Text>
       </TouchableOpacity>
-      <View style={styles.Container}>
-        <Text
-          style={{
-            fontWeight: 'bold',
-            fontSize: 18,
-            color: COLORS.primaryGray,
-          }}>
-          Tìm kiếm gần đây
-        </Text>
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          data={recent}
-          contentContainerStyle={{
-            paddingVertical: 5,
-            gap: 5,
-          }}
-          renderItem={({item}) => (
-            <TouchableOpacity onPress={() => {}}>
-              <View style={styles.RecentItem}>
-                <Text style={styles.textItem}>{item.from.path_with_type}</Text>
-                <AntDesign name="arrowdown" size={20} />
-                <Text style={styles.textItem}>{item.to.path_with_type}</Text>
-              </View>
-            </TouchableOpacity>
-          )}
-          keyExtractor={(item, index) => index.toString()}
-        />
-      </View>
+      <RecentSearch/>
     </View>
   );
 };
@@ -186,21 +139,14 @@ export default SearchScreen;
 
 const styles = StyleSheet.create({
   ScreenContainer: {
-    backgroundColor: COLORS.secondaryColor,
+    backgroundColor: COLORS.primaryWhite,
+    paddingHorizontal: 20,
     flex: 1,
   },
   SearchContainer: {
     gap: 10,
-    padding: 20,
     marginVertical: 10,
     backgroundColor: COLORS.primaryWhite,
-  },
-  Container: {
-    gap: 10,
-    padding: 20,
-    paddingVertical: 10,
-    backgroundColor: COLORS.primaryWhite,
-    flex: 1,
   },
   dropdown: {
     height: 50,
@@ -236,10 +182,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 5,
   },
-  textItem: {
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
+
   item: {
     padding: 10,
     flexDirection: 'row',
@@ -268,15 +211,5 @@ const styles = StyleSheet.create({
   textSelectedStyle: {
     marginRight: 5,
     fontSize: 16,
-  },
-  RecentItem: {
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-    gap: 5,
-    paddingHorizontal: 10,
-    paddingVertical: 15,
-    backgroundColor: COLORS.primaryWhite,
-    borderRadius: 10,
-    borderWidth: 0.5,
   },
 });

@@ -49,8 +49,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     top: 0,
-    paddingLeft: 10,
-    paddingTop: 10,
+    padding: 10,
     zIndex: 1,
   },
 });

@@ -10,10 +10,11 @@ import React, {useEffect} from 'react';
 import Animated, {useSharedValue, withSpring} from 'react-native-reanimated';
 import {COLORS} from 'theme/theme';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import { SCREEN_WIDTH } from 'lib/Dimensions';
-import { SCREEN_HEIGHT } from '@gorhom/bottom-sheet';
+import {SCREEN_WIDTH} from 'lib/Dimensions';
+import {SCREEN_HEIGHT} from '@gorhom/bottom-sheet';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const WelcomeScreen = ({navigation}: any) => {
+const WelcomeScreen = ({onStart}: {onStart: () => void}) => {
   const ring1padding = useSharedValue(0);
   const ring2padding = useSharedValue(0);
 
@@ -63,9 +64,7 @@ const WelcomeScreen = ({navigation}: any) => {
         </Text>
       </View>
       <TouchableOpacity
-        onPress={() =>
-          navigation.replace('Register')
-        }
+        onPress={onStart}
         style={{
           paddingVertical: 15,
           paddingHorizontal: 90,
@@ -96,10 +95,7 @@ const styles = StyleSheet.create({
     gap: 50,
   },
   Circle: {
-    borderRadius:
-      Math.round(
-        SCREEN_WIDTH + SCREEN_HEIGHT,
-      ) / 2,
+    borderRadius: Math.round(SCREEN_WIDTH + SCREEN_HEIGHT) / 2,
     backgroundColor: COLORS.whiteOpacity,
   },
 });

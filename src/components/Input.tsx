@@ -9,6 +9,7 @@ type Props = {
   error?: string;
   password?: boolean;
   onFocus?: () => void;
+  defaultValue?: string;
   onChangeText?: (text: string) => void;
   placeholder?: string;
   required?: boolean;
@@ -23,6 +24,7 @@ const Input = ({
   error,
   password,
   onFocus = () => {},
+  defaultValue,
   onChangeText,
   placeholder,
   required,
@@ -58,6 +60,7 @@ const Input = ({
           />
         )}
         <TextInput
+          defaultValue={defaultValue}
           autoCorrect={false}
           onFocus={() => {
             onFocus();

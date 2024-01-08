@@ -39,8 +39,25 @@ export const AuthProvider = ({children}: any) => {
   const [isLoading, setIsLoading] = useState(false);
   const [accessToken, setAccessToken] = useState<string>();
   const [userInfo, setUserInfo] = useState<UserInfoProps>();
-  console.log("accessToken context", accessToken);
-  console.log("userInfo context", userInfo);
+  useEffect(() => {
+    const isLoggedIn = async () => {
+      try {
+        setIsLoading(true);
+
+        const token = await AsyncStorage.getItem('ACCESS_TOKEN');
+        const user = await AsyncStorage.getItem('USER_INFO');
+        if (token && user) {
+          setAccessToken(token);
+          setUserInfo(JSON.parse(user));
+        }
+        setIsLoading(false);
+      } catch (error) {
+        setAccessToken(undefined);
+        console.log('isLoggedIn error:', error);
+      }
+    };
+    isLoggedIn();
+  }, []);
   const login = async (indentifier: string, password: string) => {
     try {
       setIsLoading(true);
@@ -51,8 +68,6 @@ export const AuthProvider = ({children}: any) => {
       });
       const access_token = res.data.data.access_token;
       const user = res.data.data.customer;
-      console.log(accessToken);
-      console.log(user);
       setUserInfo(user);
       setAccessToken(access_token);
 
@@ -60,6 +75,8 @@ export const AuthProvider = ({children}: any) => {
       AsyncStorage.setItem('ACCESS_TOKEN', access_token);
       return {error: false};
     } catch (error) {
+      setUserInfo(undefined);
+      setAccessToken(undefined);
       return {error: true, msg: 'Sai thông tin đăng nhập'};
     } finally {
       setIsLoading(false);
@@ -83,11 +100,13 @@ export const AuthProvider = ({children}: any) => {
       });
       const access_token = res.data.data.access_token;
       const user = res.data.data.customer;
-      setUserInfo(user);
-      setAccessToken(access_token);
+      if (res.data.data) {
+        setUserInfo(user);
+        setAccessToken(access_token);
 
-      AsyncStorage.setItem('USER_INFO', JSON.stringify(user));
-      AsyncStorage.setItem('ACCESS_TOKEN', access_token);
+        AsyncStorage.setItem('USER_INFO', JSON.stringify(user));
+        AsyncStorage.setItem('ACCESS_TOKEN', access_token);
+      }
       return {error: false};
     } catch (error: any) {
       return {error: true, msg: 'Đăng ký thất bại!'};
@@ -96,33 +115,13 @@ export const AuthProvider = ({children}: any) => {
     }
   };
   const logout = () => {
-    setIsLoading(false);
+    setIsLoading(true);
     setAccessToken(undefined);
+    setUserInfo(undefined);
     AsyncStorage.removeItem('USER_INFO');
     AsyncStorage.removeItem('ACCESS_TOKEN');
-    setIsLoading(true);
+    setIsLoading(false);
   };
-  useEffect(() => {
-    const isLoggedIn = async () => {
-      console.log('check is login');
-      try {
-        setIsLoading(true);
-
-        const user = await AsyncStorage.getItem('USER_INFO');
-        const token = await AsyncStorage.getItem('ACCESS_TOKEN');
-
-        if (user && token) {
-          console.log('co');
-          setUserInfo(JSON.parse(user));
-          setAccessToken(token);
-        }
-        setIsLoading(false);
-      } catch (error) {
-        console.log('isLoggedIn error:', error);
-      }
-    };
-    isLoggedIn();
-  }, []);
 
   return (
     <AuthContext.Provider

@@ -27,159 +27,160 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useSharedValue} from 'react-native-reanimated';
 import RouteDetail from 'components/RouteDetail';
 import {BlurView} from '@react-native-community/blur';
-const data: Booking[] = [
-  {
-    id: 936,
-    start_station: {
-      id: 14,
-      name: 'Văn phòng CTCP VTSG TpHCM',
-      address: '379 Lê Hồng Phong, Phường 2, Quận 10, TpHCM',
-      city_code: '79',
-      distance_to_sender: null,
-      partner: {
-        id: 3,
-        name: 'Công ty cổ phần vận tải Sài Gòn',
-        avatar:
-          'https://s3.ap-southeast-2.amazonaws.com/chanhxe-prod/partners/qqMVD8dy48s92saKLI9Ks49h6qezrUsJ850igMd9.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA5H6QXVIMG47AX2V7%2F20240103%2Fap-southeast-2%2Fs3%2Faws4_request&X-Amz-Date=20240103T074639Z&X-Amz-SignedHeaders=host&X-Amz-Expires=604800&X-Amz-Signature=7d4a90a71777595bae7eed3723335c1b4b0f29044fb286a4de9b38677be30cad',
-      },
-      latitude: 10.763948140349,
-      longitude: 106.67579692598,
-    },
-    end_station: {
-      id: 149,
-      name: 'Văn phòng Thành Bưởi Cà Mau',
-      address:
-        'Bến xe Đồng Tâm, 369 Quản Lộ - Phụng Hiệp, Phường 5, Cà Mau, Cà Mau 98000',
-      city_code: '96',
-      distance_to_receiver: null,
-      partner: {
-        id: 8,
-        name: 'Nhà Xe Thành Bưởi',
-        avatar:
-          'https://s3.ap-southeast-2.amazonaws.com/chanhxe-prod/partners/ccdTngyoPdFf8iEEz5SaZxC4jT8Jj631KCqQokkN.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA5H6QXVIMG47AX2V7%2F20240103%2Fap-southeast-2%2Fs3%2Faws4_request&X-Amz-Date=20240103T074639Z&X-Amz-SignedHeaders=host&X-Amz-Expires=604800&X-Amz-Signature=3babe0adfcbd233c7ec14a9bf0d0d5636e9d64c686c4e34699f1353b12a0f3b4',
-      },
-      latitude: 9.1931277,
-      longitude: 105.1783724,
-    },
-    lowest_price: 25000,
-    total_distance: 308649,
-    note: 'Quãng đường ngắn nhất',
-    acceptable_package_types: [0, 1, 4],
-  },
-  {
-    id: 937,
-    start_station: {
-      id: 14,
-      name: 'Văn phòng CTCP VTSG TpHCM',
-      address: '379 Lê Hồng Phong, Phường 2, Quận 10, TpHCM',
-      city_code: '79',
-      distance_to_sender: null,
-      partner: {
-        id: 3,
-        name: 'Công ty cổ phần vận tải Sài Gòn',
-        avatar:
-          'https://s3.ap-southeast-2.amazonaws.com/chanhxe-prod/partners/qqMVD8dy48s92saKLI9Ks49h6qezrUsJ850igMd9.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA5H6QXVIMG47AX2V7%2F20240103%2Fap-southeast-2%2Fs3%2Faws4_request&X-Amz-Date=20240103T074639Z&X-Amz-SignedHeaders=host&X-Amz-Expires=604800&X-Amz-Signature=7d4a90a71777595bae7eed3723335c1b4b0f29044fb286a4de9b38677be30cad',
-      },
-      latitude: 10.763948140349,
-      longitude: 106.67579692598,
-    },
-    end_station: {
-      id: 157,
-      name: 'Văn phòng Thiên Trường ở Cà Mau',
-      address:
-        'Bến xe Đồng Tâm, 369 Quản Lộ - Phụng Hiệp, Phường 5, Cà Mau, Cà Mau 98000',
-      city_code: '96',
-      distance_to_receiver: null,
-      partner: {
-        id: 12,
-        name: 'Nhà xe Thiên Trường',
-        avatar:
-          'https://s3.ap-southeast-2.amazonaws.com/chanhxe-prod/partners/FpXu4Wx2Sq1FkPBNlTO4yev7oDJShkdCjlIDOR29.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA5H6QXVIMG47AX2V7%2F20240103%2Fap-southeast-2%2Fs3%2Faws4_request&X-Amz-Date=20240103T074639Z&X-Amz-SignedHeaders=host&X-Amz-Expires=604800&X-Amz-Signature=f24bf7407a7fa0b151f8fc2ceccb4529abc97685b4f3c8d08abed23d8a9d4adc',
-      },
-      latitude: 9.1931277,
-      longitude: 105.1783724,
-    },
-    lowest_price: 25000,
-    total_distance: 308649,
-    note: null,
-    acceptable_package_types: [0, 1, 4],
-  },
-  {
-    id: 938,
-    start_station: {
-      id: 14,
-      name: 'Văn phòng CTCP VTSG TpHCM',
-      address: '379 Lê Hồng Phong, Phường 2, Quận 10, TpHCM',
-      city_code: '79',
-      distance_to_sender: null,
-      partner: {
-        id: 3,
-        name: 'Công ty cổ phần vận tải Sài Gòn',
-        avatar:
-          'https://s3.ap-southeast-2.amazonaws.com/chanhxe-prod/partners/qqMVD8dy48s92saKLI9Ks49h6qezrUsJ850igMd9.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA5H6QXVIMG47AX2V7%2F20240103%2Fap-southeast-2%2Fs3%2Faws4_request&X-Amz-Date=20240103T074639Z&X-Amz-SignedHeaders=host&X-Amz-Expires=604800&X-Amz-Signature=7d4a90a71777595bae7eed3723335c1b4b0f29044fb286a4de9b38677be30cad',
-      },
-      latitude: 10.763948140349,
-      longitude: 106.67579692598,
-    },
-    end_station: {
-      id: 146,
-      name: 'Văn phòng Hùng Cường Cà Mau',
-      address: '9 Khóm 6, Khóm 6B, thị trấn Sông Đốc, Trần Văn Thời, Cà Mau',
-      city_code: '96',
-      distance_to_receiver: null,
-      partner: {
-        id: 1,
-        name: 'Công ty xe khách Hùng Cường',
-        avatar:
-          'https://s3.ap-southeast-2.amazonaws.com/chanhxe-prod/partners/A0PkIxFNEwivvhsTqEVNEcvVFdKmXW2ylxg1G6PI.png?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA5H6QXVIMG47AX2V7%2F20240103%2Fap-southeast-2%2Fs3%2Faws4_request&X-Amz-Date=20240103T074639Z&X-Amz-SignedHeaders=host&X-Amz-Expires=604800&X-Amz-Signature=b10972e9354f78ed53c9e3216d63be0b2e9ea3cbde9db21903ee067da7af6838',
-      },
-      latitude: 9.0299022,
-      longitude: 104.8130438,
-    },
-    lowest_price: 28560,
-    total_distance: 356840,
-    note: null,
-    acceptable_package_types: [0, 1, 4],
-  },
-  {
-    id: 935,
-    start_station: {
-      id: 150,
-      name: 'Văn phòng Hùng Cường quận 10',
-      address:
-        'IVAN Vietnam, 656 Sư Vạn Hạnh, Phường 12, Quận 10, Hồ Chí Minh 700000',
-      city_code: '79',
-      distance_to_sender: null,
-      partner: {
-        id: 1,
-        name: 'Công ty xe khách Hùng Cường',
-        avatar:
-          'https://s3.ap-southeast-2.amazonaws.com/chanhxe-prod/partners/A0PkIxFNEwivvhsTqEVNEcvVFdKmXW2ylxg1G6PI.png?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA5H6QXVIMG47AX2V7%2F20240103%2Fap-southeast-2%2Fs3%2Faws4_request&X-Amz-Date=20240103T074638Z&X-Amz-SignedHeaders=host&X-Amz-Expires=604800&X-Amz-Signature=a327bbd715bcd56f354d7c04ed4e750cf5da3847362d704f5fe80acfcda3362b',
-      },
-      latitude: 10.77042,
-      longitude: 106.6705529,
-    },
-    end_station: {
-      id: 146,
-      name: 'Văn phòng Hùng Cường Cà Mau',
-      address: '9 Khóm 6, Khóm 6B, thị trấn Sông Đốc, Trần Văn Thời, Cà Mau',
-      city_code: '96',
-      distance_to_receiver: null,
-      partner: {
-        id: 1,
-        name: 'Công ty xe khách Hùng Cường',
-        avatar:
-          'https://s3.ap-southeast-2.amazonaws.com/chanhxe-prod/partners/A0PkIxFNEwivvhsTqEVNEcvVFdKmXW2ylxg1G6PI.png?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA5H6QXVIMG47AX2V7%2F20240103%2Fap-southeast-2%2Fs3%2Faws4_request&X-Amz-Date=20240103T074639Z&X-Amz-SignedHeaders=host&X-Amz-Expires=604800&X-Amz-Signature=b10972e9354f78ed53c9e3216d63be0b2e9ea3cbde9db21903ee067da7af6838',
-      },
-      latitude: 9.0299022,
-      longitude: 104.8130438,
-    },
-    lowest_price: 30000,
-    total_distance: 575303,
-    note: null,
-    acceptable_package_types: [0, 1, 2, 3, 4, 5],
-  },
-];
+import { SCREEN_HEIGHT } from 'lib/Dimensions';
+// const data: Booking[] = [
+//   {
+//     id: 936,
+//     start_station: {
+//       id: 14,
+//       name: 'Văn phòng CTCP VTSG TpHCM',
+//       address: '379 Lê Hồng Phong, Phường 2, Quận 10, TpHCM',
+//       city_code: '79',
+//       distance_to_sender: null,
+//       partner: {
+//         id: 3,
+//         name: 'Công ty cổ phần vận tải Sài Gòn',
+//         avatar:
+//           'https://s3.ap-southeast-2.amazonaws.com/chanhxe-prod/partners/qqMVD8dy48s92saKLI9Ks49h6qezrUsJ850igMd9.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA5H6QXVIMG47AX2V7%2F20240103%2Fap-southeast-2%2Fs3%2Faws4_request&X-Amz-Date=20240103T074639Z&X-Amz-SignedHeaders=host&X-Amz-Expires=604800&X-Amz-Signature=7d4a90a71777595bae7eed3723335c1b4b0f29044fb286a4de9b38677be30cad',
+//       },
+//       latitude: 10.763948140349,
+//       longitude: 106.67579692598,
+//     },
+//     end_station: {
+//       id: 149,
+//       name: 'Văn phòng Thành Bưởi Cà Mau',
+//       address:
+//         'Bến xe Đồng Tâm, 369 Quản Lộ - Phụng Hiệp, Phường 5, Cà Mau, Cà Mau 98000',
+//       city_code: '96',
+//       distance_to_receiver: null,
+//       partner: {
+//         id: 8,
+//         name: 'Nhà Xe Thành Bưởi',
+//         avatar:
+//           'https://s3.ap-southeast-2.amazonaws.com/chanhxe-prod/partners/ccdTngyoPdFf8iEEz5SaZxC4jT8Jj631KCqQokkN.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA5H6QXVIMG47AX2V7%2F20240103%2Fap-southeast-2%2Fs3%2Faws4_request&X-Amz-Date=20240103T074639Z&X-Amz-SignedHeaders=host&X-Amz-Expires=604800&X-Amz-Signature=3babe0adfcbd233c7ec14a9bf0d0d5636e9d64c686c4e34699f1353b12a0f3b4',
+//       },
+//       latitude: 9.1931277,
+//       longitude: 105.1783724,
+//     },
+//     lowest_price: 25000,
+//     total_distance: 308649,
+//     note: 'Quãng đường ngắn nhất',
+//     acceptable_package_types: [0, 1, 4],
+//   },
+//   {
+//     id: 937,
+//     start_station: {
+//       id: 14,
+//       name: 'Văn phòng CTCP VTSG TpHCM',
+//       address: '379 Lê Hồng Phong, Phường 2, Quận 10, TpHCM',
+//       city_code: '79',
+//       distance_to_sender: null,
+//       partner: {
+//         id: 3,
+//         name: 'Công ty cổ phần vận tải Sài Gòn',
+//         avatar:
+//           'https://s3.ap-southeast-2.amazonaws.com/chanhxe-prod/partners/qqMVD8dy48s92saKLI9Ks49h6qezrUsJ850igMd9.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA5H6QXVIMG47AX2V7%2F20240103%2Fap-southeast-2%2Fs3%2Faws4_request&X-Amz-Date=20240103T074639Z&X-Amz-SignedHeaders=host&X-Amz-Expires=604800&X-Amz-Signature=7d4a90a71777595bae7eed3723335c1b4b0f29044fb286a4de9b38677be30cad',
+//       },
+//       latitude: 10.763948140349,
+//       longitude: 106.67579692598,
+//     },
+//     end_station: {
+//       id: 157,
+//       name: 'Văn phòng Thiên Trường ở Cà Mau',
+//       address:
+//         'Bến xe Đồng Tâm, 369 Quản Lộ - Phụng Hiệp, Phường 5, Cà Mau, Cà Mau 98000',
+//       city_code: '96',
+//       distance_to_receiver: null,
+//       partner: {
+//         id: 12,
+//         name: 'Nhà xe Thiên Trường',
+//         avatar:
+//           'https://s3.ap-southeast-2.amazonaws.com/chanhxe-prod/partners/FpXu4Wx2Sq1FkPBNlTO4yev7oDJShkdCjlIDOR29.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA5H6QXVIMG47AX2V7%2F20240103%2Fap-southeast-2%2Fs3%2Faws4_request&X-Amz-Date=20240103T074639Z&X-Amz-SignedHeaders=host&X-Amz-Expires=604800&X-Amz-Signature=f24bf7407a7fa0b151f8fc2ceccb4529abc97685b4f3c8d08abed23d8a9d4adc',
+//       },
+//       latitude: 9.1931277,
+//       longitude: 105.1783724,
+//     },
+//     lowest_price: 25000,
+//     total_distance: 308649,
+//     note: null,
+//     acceptable_package_types: [0, 1, 4],
+//   },
+//   {
+//     id: 938,
+//     start_station: {
+//       id: 14,
+//       name: 'Văn phòng CTCP VTSG TpHCM',
+//       address: '379 Lê Hồng Phong, Phường 2, Quận 10, TpHCM',
+//       city_code: '79',
+//       distance_to_sender: null,
+//       partner: {
+//         id: 3,
+//         name: 'Công ty cổ phần vận tải Sài Gòn',
+//         avatar:
+//           'https://s3.ap-southeast-2.amazonaws.com/chanhxe-prod/partners/qqMVD8dy48s92saKLI9Ks49h6qezrUsJ850igMd9.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA5H6QXVIMG47AX2V7%2F20240103%2Fap-southeast-2%2Fs3%2Faws4_request&X-Amz-Date=20240103T074639Z&X-Amz-SignedHeaders=host&X-Amz-Expires=604800&X-Amz-Signature=7d4a90a71777595bae7eed3723335c1b4b0f29044fb286a4de9b38677be30cad',
+//       },
+//       latitude: 10.763948140349,
+//       longitude: 106.67579692598,
+//     },
+//     end_station: {
+//       id: 146,
+//       name: 'Văn phòng Hùng Cường Cà Mau',
+//       address: '9 Khóm 6, Khóm 6B, thị trấn Sông Đốc, Trần Văn Thời, Cà Mau',
+//       city_code: '96',
+//       distance_to_receiver: null,
+//       partner: {
+//         id: 1,
+//         name: 'Công ty xe khách Hùng Cường',
+//         avatar:
+//           'https://s3.ap-southeast-2.amazonaws.com/chanhxe-prod/partners/A0PkIxFNEwivvhsTqEVNEcvVFdKmXW2ylxg1G6PI.png?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA5H6QXVIMG47AX2V7%2F20240103%2Fap-southeast-2%2Fs3%2Faws4_request&X-Amz-Date=20240103T074639Z&X-Amz-SignedHeaders=host&X-Amz-Expires=604800&X-Amz-Signature=b10972e9354f78ed53c9e3216d63be0b2e9ea3cbde9db21903ee067da7af6838',
+//       },
+//       latitude: 9.0299022,
+//       longitude: 104.8130438,
+//     },
+//     lowest_price: 28560,
+//     total_distance: 356840,
+//     note: null,
+//     acceptable_package_types: [0, 1, 4],
+//   },
+//   {
+//     id: 935,
+//     start_station: {
+//       id: 150,
+//       name: 'Văn phòng Hùng Cường quận 10',
+//       address:
+//         'IVAN Vietnam, 656 Sư Vạn Hạnh, Phường 12, Quận 10, Hồ Chí Minh 700000',
+//       city_code: '79',
+//       distance_to_sender: null,
+//       partner: {
+//         id: 1,
+//         name: 'Công ty xe khách Hùng Cường',
+//         avatar:
+//           'https://s3.ap-southeast-2.amazonaws.com/chanhxe-prod/partners/A0PkIxFNEwivvhsTqEVNEcvVFdKmXW2ylxg1G6PI.png?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA5H6QXVIMG47AX2V7%2F20240103%2Fap-southeast-2%2Fs3%2Faws4_request&X-Amz-Date=20240103T074638Z&X-Amz-SignedHeaders=host&X-Amz-Expires=604800&X-Amz-Signature=a327bbd715bcd56f354d7c04ed4e750cf5da3847362d704f5fe80acfcda3362b',
+//       },
+//       latitude: 10.77042,
+//       longitude: 106.6705529,
+//     },
+//     end_station: {
+//       id: 146,
+//       name: 'Văn phòng Hùng Cường Cà Mau',
+//       address: '9 Khóm 6, Khóm 6B, thị trấn Sông Đốc, Trần Văn Thời, Cà Mau',
+//       city_code: '96',
+//       distance_to_receiver: null,
+//       partner: {
+//         id: 1,
+//         name: 'Công ty xe khách Hùng Cường',
+//         avatar:
+//           'https://s3.ap-southeast-2.amazonaws.com/chanhxe-prod/partners/A0PkIxFNEwivvhsTqEVNEcvVFdKmXW2ylxg1G6PI.png?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA5H6QXVIMG47AX2V7%2F20240103%2Fap-southeast-2%2Fs3%2Faws4_request&X-Amz-Date=20240103T074639Z&X-Amz-SignedHeaders=host&X-Amz-Expires=604800&X-Amz-Signature=b10972e9354f78ed53c9e3216d63be0b2e9ea3cbde9db21903ee067da7af6838',
+//       },
+//       latitude: 9.0299022,
+//       longitude: 104.8130438,
+//     },
+//     lowest_price: 30000,
+//     total_distance: 575303,
+//     note: null,
+//     acceptable_package_types: [0, 1, 2, 3, 4, 5],
+//   },
+// ];
 
 export type Booking = {
   id: number;
@@ -217,7 +218,6 @@ export type Booking = {
   acceptable_package_types: number[];
 };
 
-const {height: SCREEN_HEIGHT} = Dimensions.get('window');
 const SearchListScreen = ({navigation, route}: any) => {
   const {from, to, package_types} = route.params;
   const [routes, setRoutes] = useState<Booking[]>([]);
@@ -231,35 +231,34 @@ const SearchListScreen = ({navigation, route}: any) => {
     () => [320 + bottomSafeArea],
     [bottomSafeArea],
   );
-  // useEffect(() => {
-  //   const getSearch = async () => {
-  //     setLoading(true);
-  //     try {
-  //       const url = qs.stringifyUrl(
-  //         {
-  //           url: '/route/search',
-  //           query: {
-  //             start_city_code: from.parent_code,
-  //             start_district_code: from.code,
-  //             end_city_code: to.parent_code,
-  //             end_district_code: to.code,
-  //             package_types: package_types.toString(),
-  //             number_of_results: 20,
-  //           },
-  //         },
-  //         {skipNull: true, skipEmptyString: true},
-  //       );
-  //       console.log('url', url);
-  //       const res = await axios.get(url);
-  //       setRoutes(res.data.data);
-  //     } catch (error) {
-  //       console.log('Failed to fetch search route', error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-  //   getSearch();
-  // }, [package_types, from, to]);
+  useEffect(() => {
+    const getSearch = async () => {
+      setLoading(true);
+      try {
+        const url = qs.stringifyUrl(
+          {
+            url: '/route/search',
+            query: {
+              start_city_code: from.parent_code,
+              start_district_code: from.code,
+              end_city_code: to.parent_code,
+              end_district_code: to.code,
+              package_types: package_types.toString(),
+              number_of_results: 20,
+            },
+          },
+          {skipNull: true, skipEmptyString: true},
+        );
+        const res = await axios.get(url);
+        setRoutes(res.data.data);
+      } catch (error) {
+        console.log('Failed to fetch search route', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    getSearch();
+  }, [package_types, from, to]);
 
   const onChooseRoute = useCallback(
     (item: Booking) => {
@@ -366,7 +365,7 @@ const SearchListScreen = ({navigation, route}: any) => {
             </Text>
             <FlatList
               showsVerticalScrollIndicator={false}
-              data={data}
+              data={routes}
               contentContainerStyle={[styles.FlatListContainer]}
               renderItem={({item}) => (
                 <TouchableOpacity
@@ -407,8 +406,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     top: 0,
-    paddingLeft: 15,
-    paddingTop: 0,
+    padding: 15,
     zIndex: 1,
   },
   Header: {

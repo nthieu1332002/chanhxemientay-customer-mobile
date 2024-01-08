@@ -4,6 +4,8 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {COLORS} from '../theme/theme';
 import HomeScreen from '../screens/HomeScreen';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+
 import SearchListScreen from 'screens/SearchListScreen';
 import ProfileScreen from 'screens/ProfileScreen';
 const Tab = createBottomTabNavigator();
@@ -21,16 +23,18 @@ const TabNavigator = () => {
         component={HomeScreen}
         options={{
           tabBarIcon: ({focused, color, size}) => (
-            <Icon
+            <AntDesign
               name="home"
-              size={30}
+              size={20}
               color={focused ? COLORS.primaryColor : COLORS.primaryGray}
             />
           ),
           tabBarLabel: ({focused}) => (
             <Text
               style={{
+                fontSize: 12,
                 color: focused ? COLORS.primaryColor : COLORS.primaryGray,
+                marginBottom: 5
               }}>
               Trang chủ
             </Text>
@@ -42,16 +46,18 @@ const TabNavigator = () => {
         component={SearchListScreen}
         options={{
           tabBarIcon: ({focused, color, size}) => (
-            <Icon
-              name="search"
-              size={25}
+            <AntDesign
+              name="search1"
+              size={18}
               color={focused ? COLORS.primaryColor : COLORS.primaryGray}
             />
           ),
           tabBarLabel: ({focused}) => (
             <Text
               style={{
+                fontSize: 12,
                 color: focused ? COLORS.primaryColor : COLORS.primaryGray,
+                marginBottom: 5
               }}>
               Tra cứu
             </Text>
@@ -64,8 +70,8 @@ const TabNavigator = () => {
         options={{
           tabBarIcon: ({focused, color, size}) => (
             <Icon
-              name="user"
-              size={30}
+              name="user-o"
+              size={18}
               color={focused ? COLORS.primaryColor : COLORS.primaryGray}
             />
           ),
@@ -73,6 +79,8 @@ const TabNavigator = () => {
             <Text
               style={{
                 color: focused ? COLORS.primaryColor : COLORS.primaryGray,
+                fontSize: 12,
+                marginBottom: 5
               }}>
               Tài khoản
             </Text>
@@ -85,9 +93,9 @@ const TabNavigator = () => {
 
 const styles = StyleSheet.create({
   tabBarStyle: {
-    height: 60,
-    borderTopWidth: 0,
-    elevation: 0,
+    paddingVertical: 5,
+    height: 50,
+    borderTopWidth: 0.5,
   },
 });
 

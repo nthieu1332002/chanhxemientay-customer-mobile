@@ -3,25 +3,30 @@ import {
   StatusBar,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
 import React from 'react';
 import {COLORS} from 'theme/theme';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {useAuth} from 'context/AuthContext';
 import Avatar from 'components/Avatar';
 import SaleSection from 'components/SaleSection';
+import RecentSearch from './RecentSearch';
+import {useAuth} from 'context/AuthContext';
+import PartnerList from 'components/PartnerList';
+import ViewMore from 'components/ViewMore';
 
 const HomeScreen = ({navigation}: any) => {
-  const {logout} = useAuth();
+  const {userInfo} = useAuth();
   return (
     <View style={styles.ScreenContainer}>
       <StatusBar backgroundColor={COLORS.primaryColor} />
       <View style={styles.Header}>
-        <Text style={styles.HeaderText}>Xin chào <Text style={{color: COLORS.primaryBlack}}>Trung Hiếu!</Text></Text>
-        <Avatar/>
+        <Text style={styles.HeaderText} numberOfLines={1}>
+          Xin chào{' '}
+          <Text style={{color: COLORS.primaryBlack}}>{userInfo?.name}!</Text>
+        </Text>
+        <Avatar />
       </View>
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -34,8 +39,7 @@ const HomeScreen = ({navigation}: any) => {
           <TouchableOpacity
             style={styles.InputContainerComponent}
             onPress={() => {
-              // navigation.push('Search');
-              logout();
+              navigation.push('Search');
             }}>
             <Icon name="search" size={16} />
             <Text
@@ -46,16 +50,20 @@ const HomeScreen = ({navigation}: any) => {
               Tìm chuyến xe...
             </Text>
           </TouchableOpacity>
-            <SaleSection/>
+          <SaleSection />
         </View>
-          <Text
-            style={styles.SectionTittle}>
-            Tìm kiếm gần đây
-          </Text>
-          <Text
-            style={styles.SectionTittle}>
-            Nhà xe
-          </Text>
+        <RecentSearch horizontal />
+        <View
+          style={{
+            marginTop: 10,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}>
+          <Text style={styles.SectionTittle}>Nhà xe</Text>
+          <ViewMore />
+        </View>
+        <PartnerList />
       </ScrollView>
     </View>
   );
@@ -77,6 +85,7 @@ const styles = StyleSheet.create({
   HeaderText: {
     fontSize: 17,
     fontWeight: '500',
+    maxWidth: 270,
   },
   ScrollViewFlex: {
     flexGrow: 1,
@@ -100,7 +109,7 @@ const styles = StyleSheet.create({
   },
   SectionTittle: {
     color: COLORS.primaryBlack,
-    fontSize: 21,
+    fontSize: 18,
     fontWeight: 'bold',
-  }
+  },
 });

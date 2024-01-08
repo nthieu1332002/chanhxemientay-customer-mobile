@@ -2,16 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import HeaderBar from 'components/HeaderBar';
 import Input from 'components/Input';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {
-  View,
-  Text,
-  SafeAreaView,
-  Keyboard,
-  ScrollView,
-  StyleSheet,
-  Button,
-  Dimensions,
-} from 'react-native';
+import {View, Text, Keyboard, ScrollView, StyleSheet} from 'react-native';
 import {COLORS} from 'theme/theme';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import BottomSheet, {BottomSheetFooter} from '@gorhom/bottom-sheet';
@@ -24,11 +15,14 @@ import {emailPattern, phoneNumberPattern} from 'data/constants';
 import qs from 'query-string';
 import axios from 'lib/axios';
 import {debounce} from 'lib/debounce';
+import {useAuth} from 'context/AuthContext';
+import {SCREEN_HEIGHT} from 'lib/Dimensions';
+import { useToast } from 'react-native-toast-notifications';
 
 type FieldType = {
-  sender_name: string;
-  sender_phone: string;
-  sender_email: string;
+  sender_name?: string;
+  sender_phone?: string;
+  sender_email?: string;
   receiver_name: string;
   receiver_phone: string;
   receiver_email: string;
@@ -38,9 +32,6 @@ type FieldType = {
   width: number;
   package_value: number; // giá trị hàng hóa
   note: string;
-  package_types: number[];
-  payment_method: number;
-  collect_on_delivery: boolean;
 };
 type ErrorType = {
   sender_name: string;
@@ -53,16 +44,31 @@ type ErrorType = {
   package_value: string;
   weight: string;
 };
-const {height: SCREEN_HEIGHT} = Dimensions.get('window');
 const MIN_INSURANCE = 1000000;
 const PERCENT_INSURANCE = 0.005;
 const BookingFormScreen = ({navigation, route}: any) => {
+  const {userInfo} = useAuth();
   const {item} = route.params;
-  const [inputs, setInputs] = useState<FieldType>();
+  const [inputs, setInputs] = useState<FieldType>({
+    sender_name: userInfo?.name || '',
+    sender_phone: userInfo?.phone || '',
+    sender_email: userInfo?.email || '',
+    receiver_name: '',
+    receiver_phone: '',
+    receiver_email: '',
+    weight: 0,
+    height: 0,
+    length: 0,
+    width: 0,
+    package_value: 0,
+    note: '..',
+  });
+
   const [payment, setPayment] = useState(0);
   const [checked, setChecked] = useState(false);
   const [errors, setErrors] = useState<ErrorType>();
   const [loading, setLoading] = useState(false);
+  const toast = useToast();
 
   const priceDetailRef = useRef<BottomSheet>(null);
   const {bottom: bottomSafeArea, top: topSafeArea} = useSafeAreaInsets();
@@ -112,6 +118,7 @@ const BookingFormScreen = ({navigation, route}: any) => {
           });
           const res = await axios.get(url);
           setSizePrice(res.data.data.total_price);
+          handleError('', 'package_size');
         }
       } catch (error: any) {
         console.log('error', error.response.data.message);
@@ -129,44 +136,37 @@ const BookingFormScreen = ({navigation, route}: any) => {
     item.total_distance,
   ]);
 
-  const handleSubmit = useCallback(
-    async (values: FieldType) => {
-      try {
-        setLoading(true);
-        const data = {
-          ...inputs,
-          height: values.height * 10,
-          width: values.width * 10,
-          length: values.length * 10,
-          weight: values.weight * 1000,
-          order_route_id: item.id,
-          collect_on_delivery: checked,
-          package_types: item.acceptable_package_types,
-          payment_method: payment,
-        };
-        const res = await axios.post('/orders', data);
+  const handleSubmit = useCallback(async () => {
+    try {
+      setLoading(true);
+      const data = {
+        ...inputs,
+        height: inputs.height * 10,
+        width: inputs.width * 10,
+        length: inputs.length * 10,
+        weight: inputs.weight * 1000,
+        order_route_id: item.id,
+        collect_on_delivery: checked,
+        package_types: item.acceptable_package_types,
+        payment_method: payment,
+      };
+      console.log(data);
+      const res = await axios.post('/orders', data);
 
-        if (res.data.data) {
-          navigation.replace('BookingSuccess', {
-            code: res.data.data.code,
-            email: res.data.data.email,
-          });
-        }
-      } catch (error) {
-        console.log('Có lỗi xảy ra, tạo đơn hàng thất bại!', error);
-      } finally {
-        setLoading(false);
+      if (res.data.data) {
+        navigation.replace('BookingSuccess', {
+          code: res.data.data.code,
+          email: res.data.data.email,
+        });
       }
-    },
-    [
-      checked,
-      inputs,
-      item.acceptable_package_types,
-      item.id,
-      navigation,
-      payment,
-    ],
-  );
+    } catch (error: any) {
+      toast.show('Có lỗi xảy ra, tạo đơn hàng thất bại!', {type: 'danger'});
+      toast.show(error.response.data.message, {type: 'danger'});
+
+    } finally {
+      setLoading(false);
+    }
+  }, [checked, inputs, item.acceptable_package_types, item.id, navigation, payment, toast]);
 
   const validate = useCallback(() => {
     Keyboard.dismiss();
@@ -216,8 +216,8 @@ const BookingFormScreen = ({navigation, route}: any) => {
       handleError('Giá trị không được bỏ trống.', 'package_value');
       isValid = false;
     }
-    if (isValid && inputs) {
-      handleSubmit(inputs);
+    if (isValid) {
+      handleSubmit();
     }
   }, [inputs, handleSubmit]);
 
@@ -269,6 +269,7 @@ const BookingFormScreen = ({navigation, route}: any) => {
         <View style={styles.Section}>
           <Input
             required
+            defaultValue={userInfo?.name}
             onChangeText={(text: any) => handleOnchange(text, 'sender_name')}
             onFocus={() => handleError(null, 'sender_name')}
             iconName="account-outline"
@@ -278,6 +279,7 @@ const BookingFormScreen = ({navigation, route}: any) => {
           />
           <Input
             required
+            defaultValue={userInfo?.email}
             onChangeText={(text: string) =>
               handleOnchange(text, 'sender_email')
             }
@@ -290,6 +292,7 @@ const BookingFormScreen = ({navigation, route}: any) => {
           <Input
             required
             keyboardType="numeric"
+            defaultValue={userInfo?.phone}
             onChangeText={(text: any) => handleOnchange(text, 'sender_phone')}
             onFocus={() => handleError(null, 'sender_phone')}
             iconName="phone-outline"

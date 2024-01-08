@@ -71,7 +71,7 @@ const BookingSuccessScreen = ({navigation, route}: any) => {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate('Home');
+            navigation.replace('Home');
           }}
           style={[styles.Button, {backgroundColor: COLORS.secondaryGray}]}>
           <Text
