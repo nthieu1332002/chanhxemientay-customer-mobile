@@ -5,6 +5,7 @@ import BookingFormScreen from 'screens/BookingFormScreen';
 import BookingSuccessScreen from 'screens/BookingSuccessScreen';
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import OrderDetailScreen from 'screens/OrderDetailScreen';
 const Stack = createNativeStackNavigator();
 
 const AppStack = () => {
@@ -33,6 +34,11 @@ const AppStack = () => {
       <Stack.Screen
         name="BookingSuccess"
         component={BookingSuccessScreen}
+        options={{animation: 'slide_from_right'}}
+      />
+      <Stack.Screen
+        name="OrderDetail"
+        component={OrderDetailScreen}
         options={{animation: 'slide_from_right'}}
       />
     </Stack.Navigator>

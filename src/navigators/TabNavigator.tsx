@@ -5,9 +5,10 @@ import {COLORS} from '../theme/theme';
 import HomeScreen from '../screens/HomeScreen';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import Feather from 'react-native-vector-icons/Feather';
 
-import SearchListScreen from 'screens/SearchListScreen';
 import ProfileScreen from 'screens/ProfileScreen';
+import OrdersScreen from 'screens/OrdersScreen';
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
@@ -42,12 +43,13 @@ const TabNavigator = () => {
         }}
       />
       <Tab.Screen
-        name="Search"
-        component={SearchListScreen}
+        name="Orders"
+        component={OrdersScreen}
+
         options={{
           tabBarIcon: ({focused, color, size}) => (
-            <AntDesign
-              name="search1"
+            <Feather
+              name="box"
               size={18}
               color={focused ? COLORS.primaryColor : COLORS.primaryGray}
             />
@@ -59,7 +61,7 @@ const TabNavigator = () => {
                 color: focused ? COLORS.primaryColor : COLORS.primaryGray,
                 marginBottom: 5
               }}>
-              Tra cứu
+              Đơn hàng
             </Text>
           ),
         }}

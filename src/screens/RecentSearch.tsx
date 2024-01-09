@@ -37,82 +37,91 @@ const RecentSearch = ({horizontal}: Props) => {
           flex: horizontal ? 0 : 1,
         },
       ]}>
-      <Text
-        style={{
-          fontWeight: 'bold',
-          fontSize: 18,
-          color: COLORS.primaryBlack,
-        }}>
-        Tìm kiếm gần đây
-      </Text>
-      <FlatList
-        horizontal={horizontal}
-        showsVerticalScrollIndicator={false}
-        data={recent}
-        contentContainerStyle={{
-          paddingVertical: 8,
-          gap: 5,
-        }}
-        renderItem={({item}) => {
-          const packages = item.selected.map((value: number) => {
-            const foundItem = packageType.find(a => a.value === value);
-            return foundItem ? foundItem.label : undefined;
-          });
-          return (
-            <TouchableOpacity onPress={() => {}}>
-              <View
-                style={[
-                  styles.RecentItem,
-                  {
-                    width: horizontal ? 250 : '100%',
-                    height: horizontal ? 140 : 'auto',
-                  },
-                ]}>
-                <View
-                  style={[
-                    styles.Location,
-                    {
-                      alignItems: horizontal ? 'flex-start' : 'center',
-                    },
-                  ]}>
-                  <FontAwesome6 name="circle-dot" size={15} color="red" />
+      {recent.length > 0 ? (
+        <>
+          <Text
+            style={{
+              fontWeight: 'bold',
+              fontSize: 18,
+              color: COLORS.primaryBlack,
+            }}>
+            Tìm kiếm gần đây
+          </Text>
+          <FlatList
+            horizontal={horizontal}
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
+            data={recent}
+            contentContainerStyle={{
+              paddingVertical: 8,
+              gap: 10,
+            }}
+            renderItem={({item}) => {
+              const packages = item.selected.map((value: number) => {
+                const foundItem = packageType.find(a => a.value === value);
+                return foundItem ? foundItem.label : undefined;
+              });
+              return (
+                <TouchableOpacity onPress={() => {}}>
+                  <View
+                    style={[
+                      styles.RecentItem,
+                      {
+                        width: horizontal ? 220 : '100%',
+                        height: horizontal ? 140 : 'auto',
+                      },
+                    ]}>
+                    <View
+                      style={[
+                        styles.Location,
+                        {
+                          alignItems: horizontal ? 'flex-start' : 'center',
+                        },
+                      ]}>
+                      <FontAwesome6 name="circle-dot" size={15} color="red" />
 
-                  <Text style={styles.textItem} numberOfLines={1}>
-                    {item.from.path_with_type}
-                  </Text>
-                </View>
-                <View style={{gap: 2}}>
-                  <View style={styles.Dot} />
-                  <View style={styles.Dot} />
-                  <View style={styles.Dot} />
-                </View>
-
-                <View
-                  style={[
-                    styles.Location,
-                    {
-                      alignItems: horizontal ? 'flex-start' : 'center',
-                    },
-                  ]}>
-                  <FontAwesome6 name="location-dot" size={18} color="blue" />
-
-                  <Text style={styles.textItem} numberOfLines={1}>
-                    {item.to.path_with_type}
-                  </Text>
-                </View>
-                <View style={styles.PackageList}>
-                  {packages.map((a: string, index: number) => (
-                    <View key={index} style={styles.Package}>
-                      <Text style={{color: '#1ec853'}}>{a}</Text>
+                      <Text style={styles.textItem} numberOfLines={1}>
+                        {item.from.path_with_type}
+                      </Text>
                     </View>
-                  ))}
-                </View>
-              </View>
-            </TouchableOpacity>
-          );
-        }}
-        keyExtractor={(item, index) => index.toString()}
-      />
+                    <View style={{gap: 2}}>
+                      <View style={styles.Dot} />
+                      <View style={styles.Dot} />
+                      <View style={styles.Dot} />
+                    </View>
+
+                    <View
+                      style={[
+                        styles.Location,
+                        {
+                          alignItems: horizontal ? 'flex-start' : 'center',
+                        },
+                      ]}>
+                      <FontAwesome6
+                        name="location-dot"
+                        size={18}
+                        color="blue"
+                      />
+
+                      <Text style={styles.textItem} numberOfLines={1}>
+                        {item.to.path_with_type}
+                      </Text>
+                    </View>
+                    <View style={styles.PackageList}>
+                      {packages.map((a: string, index: number) => (
+                        <View key={index} style={styles.Package}>
+                          <Text style={{color: '#1ec853'}}>{a}</Text>
+                        </View>
+                      ))}
+                    </View>
+                  </View>
+                </TouchableOpacity>
+              );
+            }}
+            keyExtractor={(item, index) => index.toString()}
+          />
+        </>
+      ) : null}
     </View>
   );
 };

@@ -57,7 +57,7 @@ const PartnerList = () => {
     <View style={{}}>
       <FlatList
         horizontal
-        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
         data={data}
         contentContainerStyle={{
           paddingVertical: 10,
@@ -81,7 +81,7 @@ const PartnerList = () => {
                   flex: 1,
                   flexWrap: 'wrap',
                   fontWeight: 'bold',
-                  color: COLORS.primaryBlack
+                  color: COLORS.primaryBlack,
                 }}>
                 {item.attributes.name}
               </Text>
@@ -119,5 +119,6 @@ const styles = StyleSheet.create({
   Content: {
     paddingHorizontal: 10,
     paddingBottom: 10,
+    gap: 5,
   },
 });

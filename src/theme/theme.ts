@@ -1,5 +1,6 @@
 export const COLORS = {
     primaryColor: "#3ebde0",
+    primaryOpacity: 'rgba(62, 189, 224, 0.75)',
     secondaryColor: "#f6f9ff",
     primaryWhite: "white",
     primaryGray: "#565e6c",
@@ -7,6 +8,8 @@ export const COLORS = {
     primaryBlack: "black",
     primaryBlackRGBA: 'rgba(12,15,20,0.5)',
     red: '#ff0000',
+    redOpacity: 'rgba(217,63,36, 0.23)',
+    greenOpacity: 'rgba(203,235,167, 0.4)',
     whiteOpacity: 'rgba(241,243,244, 0.5)'
 };
 export const FONTFAMILY = {

@@ -55,7 +55,6 @@ const HomeScreen = ({navigation}: any) => {
         <RecentSearch horizontal />
         <View
           style={{
-            marginTop: 10,
             flexDirection: 'row',
             justifyContent: 'space-between',
             alignItems: 'center',

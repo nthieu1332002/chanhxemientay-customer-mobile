@@ -3,24 +3,23 @@ import React from 'react';
 
 const Divider = ({text}: {text?: string}) => {
   return (
-    <View style={{flexDirection: 'row', alignItems: 'center', marginVertical: 20}}>
-      <View
-        style={styles.Line}
-      />
-      <View>
-        <Text
-          style={{
-            width: 50,
-            textAlign: 'center',
-            color: 'black',
-            fontSize: 15,
-          }}>
-          {text}
-        </Text>
-      </View>
-      <View
-        style={styles.Line}
-      />
+    <View
+      style={{flexDirection: 'row', alignItems: 'center', marginVertical: 20}}>
+      <View style={styles.Line} />
+      {text && (
+        <View>
+          <Text
+            style={{
+              width: 50,
+              textAlign: 'center',
+              color: 'black',
+              fontSize: 15,
+            }}>
+            {text}
+          </Text>
+        </View>
+      )}
+      <View style={styles.Line} />
     </View>
   );
 };
