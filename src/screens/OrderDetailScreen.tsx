@@ -1,5 +1,5 @@
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import React, {Fragment, useEffect, useState} from 'react';
+import React, {Fragment, useCallback, useEffect, useState} from 'react';
 
 import HeaderBar from 'components/HeaderBar';
 import {COLORS} from 'theme/theme';
@@ -12,6 +12,8 @@ import PaymentStatus from 'components/PaymentStatus';
 import Octicons from 'react-native-vector-icons/Octicons';
 import Example from 'components/TimeLine';
 import Loading from 'components/Loading';
+import QRCode from 'react-qr-code';
+import {RefreshControl} from 'react-native-gesture-handler';
 export type OrderDetail = {
   start_station: {
     id: number;
@@ -62,29 +64,36 @@ const OrderDetailScreen = ({route, navigation}: any) => {
   const [loading, setLoading] = useState(false);
   const [detail, setDetail] = useState<OrderDetail>();
 
-  useEffect(() => {
-    const fetchOrderDetail = async () => {
-      setLoading(true);
-      try {
-        const res = await axios.get(`/orders/${code}`);
-        // console.log(res.data.data.attributes);
-        setDetail(res.data.data.attributes);
-      } catch (error: any) {
-        console.log(error.response.data.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchOrderDetail();
+  const qr = 'AE11I23JJDO21JHC';
+  const fetchOrderDetail = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await axios.get(`/orders/${code}`);
+      // console.log(res.data.data.attributes);
+      setDetail(res.data.data.attributes);
+    } catch (error: any) {
+      console.log(error.response.data.message);
+    } finally {
+      setLoading(false);
+    }
   }, [code]);
-
+  useEffect(() => {
+    fetchOrderDetail();
+  }, []);
+  const onRefresh = useCallback(() => {
+    fetchOrderDetail();
+  }, [fetchOrderDetail]);
   return (
     <View style={styles.Container}>
-      <HeaderBar title={`#${code}`} navigation={navigation} type="back" />
+      <HeaderBar title={`#${code}`} type="back" />
       {loading ? (
         <Loading />
       ) : (
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl colors={[COLORS.primaryColor]} refreshing={false} onRefresh={onRefresh} />
+          }>
           <View style={styles.Content}>
             <View style={styles.Row}>
               <Text style={styles.Label}>Trạng thái: </Text>
@@ -115,6 +124,15 @@ const OrderDetailScreen = ({route, navigation}: any) => {
                 </Text>
               </View>
               <PaymentStatus status={detail?.is_paid ? 1 : 0} />
+            </View>
+            <View style={styles.QRContainer}>
+              <QRCode
+                value={qr}
+                size={164}
+                style={{height: 'auto', maxWidth: '100%', width: '100%'}}
+                viewBox={`0 0 164 164`}
+              />
+              <Text style={{color: COLORS.primaryBlack}}>{qr}</Text>
             </View>
             <View style={styles.Section}>
               <View
@@ -264,6 +282,14 @@ const styles = StyleSheet.create({
   },
   Content: {
     marginTop: 20,
+    gap: 10,
+  },
+  QRContainer: {
+    width: '100%',
+    height: 200,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
     gap: 10,
   },
   Row: {

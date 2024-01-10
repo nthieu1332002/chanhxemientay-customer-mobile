@@ -261,7 +261,7 @@ const BookingFormScreen = ({navigation, route}: any) => {
         flex: 1,
         paddingBottom: 150 + bottomSafeArea,
       }}>
-      <HeaderBar title="Lên đơn hàng" navigation={navigation} />
+      <HeaderBar title="Lên đơn hàng" />
 
       <ScrollView
         contentContainerStyle={{paddingTop: 15, paddingHorizontal: 20}}>

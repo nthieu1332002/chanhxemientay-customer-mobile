@@ -1,8 +1,8 @@
 import {FlatList, StatusBar, StyleSheet, Text, View} from 'react-native';
-import React, {Fragment, useEffect, useState} from 'react';
+import React, {Fragment, useCallback, useEffect, useState} from 'react';
 import {COLORS} from 'theme/theme';
 import {SCREEN_WIDTH} from '@gorhom/bottom-sheet';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {RefreshControl, TouchableOpacity} from 'react-native-gesture-handler';
 import Octicons from 'react-native-vector-icons/Octicons';
 import axios from 'lib/axios';
 import qs from 'query-string';
@@ -11,6 +11,7 @@ import PaymentStatus from 'components/PaymentStatus';
 import Loading from 'components/Loading';
 import InputTracking from 'components/InputTracking';
 import {debounce} from 'lib/debounce';
+import Empty from 'components/Empty';
 type Order = {
   code: string;
   created_at: string;
@@ -29,39 +30,45 @@ const OrdersScreen = ({navigation}: any) => {
   const [orders, setOrders] = useState<Order[]>();
   const [status, setStatus] = useState('');
   const [code, setCode] = useState('');
-  useEffect(() => {
-    const fetchOrders = debounce(async () => {
-      setLoading(true);
-      try {
-        const url = qs.stringifyUrl(
-          {
-            url: '/orders',
-            query: {
-              'filter[code]': code,
-              'filter[status]': status,
-              page: 1,
-              per_page: 10,
-            },
+  const [refreshing, setRefreshing] = useState(false);
+
+  const fetchOrders = debounce(async () => {
+    setLoading(true);
+    try {
+      const url = qs.stringifyUrl(
+        {
+          url: '/orders',
+          query: {
+            'filter[code]': code,
+            'filter[status]': status,
+            page: 1,
+            per_page: 10,
           },
-          {skipNull: true},
-        );
-        const res = await axios.get(url);
-        setOrders(res.data.data);
-      } catch (error: any) {
-        console.log(error.response.data.message);
-      } finally {
-        setLoading(false);
-      }
-    });
+        },
+        {skipNull: true},
+      );
+      const res = await axios.get(url);
+      setOrders(res.data.data);
+    } catch (error: any) {
+      console.log(error.response.data.message);
+    } finally {
+      setLoading(false);
+    }
+  });
+  useEffect(() => {
     fetchOrders();
-  }, [code, status]);
+  }, []);
+
+  const onRefresh = useCallback(() => {
+    fetchOrders();
+  }, [fetchOrders]);
   return (
     <View style={styles.ScreenContainer}>
       <StatusBar backgroundColor={COLORS.primaryOpacity} />
 
       <View style={styles.ScreenHeader}>
         <Text style={styles.ScreenTitle}>Theo dõi đơn hàng của bạn</Text>
-        <Text style={styles.SubTitle}>Tra cứu vận đơn với chúng tôi</Text>
+        <Text style={styles.SubTitle}>Tra cứu vận đơn</Text>
 
         <InputTracking
           onChangeText={(text: string) => {
@@ -79,7 +86,7 @@ const OrdersScreen = ({navigation}: any) => {
           horizontal
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={{
-            gap: 18,
+            gap: 10,
           }}
           data={[
             {
@@ -89,35 +96,37 @@ const OrdersScreen = ({navigation}: any) => {
             ...OrderStatus,
           ]}
           renderItem={({item}) => (
-            <View
-              onStartShouldSetResponder={event => true}
-              onTouchEnd={e => {
-                e.stopPropagation();
+            <TouchableOpacity
+              onPress={() => setStatus(item.id.toString())}
+              style={{
+                borderRadius: 15,
+                padding: 3,
+                paddingHorizontal: 9,
+                backgroundColor:
+                  item.id.toString() === status.toString()
+                    ? COLORS.primaryOpacity2
+                    : COLORS.primaryWhite,
               }}>
-              <TouchableOpacity onPress={() => setStatus(item.id.toString())}>
-                <Text
-                  style={{
-                    fontWeight:
-                      item.id.toString() === status.toString()
-                        ? 'bold'
-                        : 'normal',
-                    color:
-                      item.id === status.toString()
-                        ? COLORS.primaryBlack
-                        : COLORS.primaryGray,
-                    fontSize: 15,
-                  }}>
-                  {item.status}
-                </Text>
-              </TouchableOpacity>
-            </View>
+              <Text
+                style={{
+                  fontWeight:
+                    item.id.toString() === status.toString() ? '500' : 'normal',
+                  color:
+                    item.id.toString() === status.toString()
+                      ? COLORS.primaryColor
+                      : COLORS.primaryGray,
+                  fontSize: 15,
+                }}>
+                {item.status}
+              </Text>
+            </TouchableOpacity>
           )}
         />
       </View>
       <View style={{paddingHorizontal: 20, flex: 1}}>
         {loading ? (
           <Loading />
-        ) : (
+        ) : orders?.length ? (
           <FlatList
             showsVerticalScrollIndicator={false}
             data={orders}
@@ -125,6 +134,9 @@ const OrdersScreen = ({navigation}: any) => {
               gap: 10,
             }}
             style={{backgroundColor: COLORS.primaryWhite}}
+            refreshControl={
+              <RefreshControl colors={[COLORS.primaryColor]} refreshing={false} onRefresh={onRefresh} />
+            }
             renderItem={({item}) => (
               <TouchableOpacity
                 onPress={() =>
@@ -180,6 +192,8 @@ const OrdersScreen = ({navigation}: any) => {
               </TouchableOpacity>
             )}
           />
+        ) : (
+          <Empty text="Không có đơn hàng nào" />
         )}
       </View>
     </View>

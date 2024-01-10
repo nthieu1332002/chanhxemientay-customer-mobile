@@ -1,59 +1,60 @@
 import {OrderStatusMap} from 'data/constants';
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import dayjs from "dayjs";
+import dayjs from 'dayjs';
 import {COLORS} from 'theme/theme';
 
 export default function Example({items}: any) {
-  console.log('item', items);
   return (
     <View>
-      {items
-        ?.reverse()
-        .map(({name, address, status, achieved_at}: any, index: any) => {
-          const orderStatus = OrderStatusMap[status];
+      {items?.map(({name, address, status, achieved_at}: any, index: any) => {
+        const orderStatus = OrderStatusMap[status];
 
-          return (
-            <View key={index}>
-              <>
-                <View style={styles.card}>
-                  <View style={styles.cardDelimiter}>
-                    {index !== items.length - 1 && (
-                      <View style={styles.cardDelimiterLine} />
-                    )}
+        return (
+          <View key={index}>
+            <>
+              <View style={styles.card}>
+                <View style={styles.cardDelimiter}>
+                  {index !== items.length - 1 && (
+                    <View style={styles.cardDelimiterLine} />
+                  )}
 
-                    <View style={[styles.cardDelimiterInset]} />
-                  </View>
+                  <View style={[styles.cardDelimiterInset]} />
+                </View>
 
-                  <View style={styles.cardBody}>
-                    <View style={styles.cardBodyContent}>
-                      <Text style={styles.cardDates}> Ngày {dayjs(achieved_at).format("DD/MM/YYYY lúc HH:mm:ss")}</Text>
-                      <View
-                        style={{
-                          backgroundColor: COLORS.secondaryColor,
-                          padding: 5,
-                          paddingHorizontal: 10,
-                          borderRadius: 10,
-                        }}>
-                        <Text style={styles.cardTitle}>
-                          Đơn hàng{' '}
-                          <Text
-                            style={{
-                              color: status === 5 ? 'red' : COLORS.primaryColor,
-                            }}>
-                            {orderStatus}{' '}
-                          </Text>
-                          <Text>{name}</Text>
+                <View style={styles.cardBody}>
+                  <View style={styles.cardBodyContent}>
+                    <Text style={styles.cardDates}>
+                      {' '}
+                      Ngày{' '}
+                      {dayjs(achieved_at).format('DD/MM/YYYY lúc HH:mm:ss')}
+                    </Text>
+                    <View
+                      style={{
+                        backgroundColor: COLORS.secondaryColor,
+                        padding: 5,
+                        paddingHorizontal: 10,
+                        borderRadius: 10,
+                      }}>
+                      <Text style={styles.cardTitle}>
+                        Đơn hàng{' '}
+                        <Text
+                          style={{
+                            color: status === 5 ? 'red' : COLORS.primaryColor,
+                          }}>
+                          {orderStatus}{' '}
                         </Text>
-                        <Text style={styles.cardSubtitle}>{address}</Text>
-                      </View>
+                        <Text>{name}</Text>
+                      </Text>
+                      <Text style={styles.cardSubtitle}>{address}</Text>
                     </View>
                   </View>
                 </View>
-              </>
-            </View>
-          );
-        })}
+              </View>
+            </>
+          </View>
+        );
+      })}
     </View>
   );
 }

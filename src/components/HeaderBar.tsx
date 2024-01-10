@@ -3,16 +3,17 @@ import React from 'react';
 import {COLORS, FONTFAMILY} from '../theme/theme';
 // import ProfilePic from './ProfilePic';
 import Icon from 'react-native-vector-icons/AntDesign';
-
+import {ParamListBase, useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 type TypeProps = 'close' | 'back';
 
 type Props = {
   title?: string;
-  navigation: any;
   type?: TypeProps;
 };
 
-const HeaderBar = ({title, navigation, type = 'back'}: Props) => {
+const HeaderBar = ({title, type = 'back'}: Props) => {
+  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
   return (
     <View
       style={{
@@ -40,9 +41,9 @@ const HeaderBar = ({title, navigation, type = 'back'}: Props) => {
 const styles = StyleSheet.create({
   HeaderText: {
     fontFamily: FONTFAMILY.poppins_semibold,
-    fontSize: 20,
+    fontSize: 17,
     fontWeight: 'bold',
-    color: COLORS.primaryColor,
+    color: COLORS.primaryBlack,
     textAlign: 'center',
   },
   CloseButton: {

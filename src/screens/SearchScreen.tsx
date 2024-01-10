@@ -67,7 +67,6 @@ const SearchScreen = ({navigation}: any) => {
     <View style={styles.ScreenContainer}>
       <HeaderBar
         title="Tìm kiếm tuyến đường"
-        navigation={navigation}
         type="close"
       />
       <View style={styles.SearchContainer}>

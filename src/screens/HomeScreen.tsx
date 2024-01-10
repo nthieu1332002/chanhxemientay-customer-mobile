@@ -14,7 +14,6 @@ import SaleSection from 'components/SaleSection';
 import RecentSearch from './RecentSearch';
 import {useAuth} from 'context/AuthContext';
 import PartnerList from 'components/PartnerList';
-import ViewMore from 'components/ViewMore';
 
 const HomeScreen = ({navigation}: any) => {
   const {userInfo} = useAuth();
@@ -26,7 +25,7 @@ const HomeScreen = ({navigation}: any) => {
           Xin chào{' '}
           <Text style={{color: COLORS.primaryBlack}}>{userInfo?.name}!</Text>
         </Text>
-        <Avatar />
+        <Avatar/>
       </View>
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -53,15 +52,6 @@ const HomeScreen = ({navigation}: any) => {
           <SaleSection />
         </View>
         <RecentSearch horizontal />
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}>
-          <Text style={styles.SectionTittle}>Nhà xe</Text>
-          <ViewMore />
-        </View>
         <PartnerList />
       </ScrollView>
     </View>
@@ -106,9 +96,5 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.secondaryGray,
     alignItems: 'center',
   },
-  SectionTittle: {
-    color: COLORS.primaryBlack,
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
+
 });

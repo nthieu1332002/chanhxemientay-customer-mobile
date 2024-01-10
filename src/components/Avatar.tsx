@@ -2,11 +2,13 @@ import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {COLORS} from 'theme/theme';
 import { useAuth } from 'context/AuthContext';
+import { DrawerActions, useNavigation } from '@react-navigation/native';
 
 const Avatar = () => {
   const {logout} = useAuth();
+  const navigation = useNavigation();
   return (
-    <Pressable onPress={logout}>
+    <Pressable onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
       <View style={styles.Circle}>
         <Image
           source={require('assets/welcome.png')}
