@@ -5,6 +5,7 @@ import dayjs from 'dayjs';
 import axios from 'lib/axios';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import ViewMore from './ViewMore';
+import Loading from './Loading';
 
 type Partner = {
   id: string;
@@ -66,12 +67,16 @@ const data = [
 ];
 const PartnerList = () => {
   const [partners, setPartners] = useState<Partner[]>();
+  const [loading, setLoading] = useState(false);
   const fetchPartners = async () => {
     try {
+      setLoading(true);
       const res = await axios.get('/partners');
       setPartners(res.data.data.slice(0, 5));
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
   useEffect(() => {
@@ -79,7 +84,10 @@ const PartnerList = () => {
   }, []);
   return (
     <>
-      {partners?.length && (
+      {
+        loading && <Loading/>
+      }
+      {partners && partners?.length > 0 && (
         <>
           <View
             style={{

@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
+import React, { useCallback } from 'react';
 import {COLORS} from 'theme/theme';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Avatar from 'components/Avatar';
@@ -14,9 +14,13 @@ import SaleSection from 'components/SaleSection';
 import RecentSearch from './RecentSearch';
 import {useAuth} from 'context/AuthContext';
 import PartnerList from 'components/PartnerList';
+import {RefreshControl} from 'react-native-gesture-handler';
 
 const HomeScreen = ({navigation}: any) => {
   const {userInfo} = useAuth();
+  const onRefresh = useCallback(() => {
+
+  }, []);
   return (
     <View style={styles.ScreenContainer}>
       <StatusBar backgroundColor={COLORS.primaryColor} />
@@ -25,11 +29,18 @@ const HomeScreen = ({navigation}: any) => {
           Xin chào{' '}
           <Text style={{color: COLORS.primaryBlack}}>{userInfo?.name}!</Text>
         </Text>
-        <Avatar/>
+        <Avatar />
       </View>
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.ScrollViewFlex}>
+        contentContainerStyle={styles.ScrollViewFlex}
+        refreshControl={
+          <RefreshControl
+            colors={[COLORS.primaryColor]}
+            refreshing={false}
+            onRefresh={onRefresh}
+          />
+        }>
         <View style={styles.Body}>
           <Text style={styles.ScreenTitle}>
             Đặt chành xe với ChanhXe
@@ -96,5 +107,4 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.secondaryGray,
     alignItems: 'center',
   },
-
 });

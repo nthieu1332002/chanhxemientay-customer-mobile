@@ -1,6 +1,4 @@
 import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-
 import React from 'react';
 import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
@@ -8,8 +6,6 @@ import {AuthProvider, useAuth} from 'context/AuthContext';
 import {ToastProvider} from 'react-native-toast-notifications';
 import {useEffect} from 'react';
 import SplashScreen from 'react-native-splash-screen';
-import {ActivityIndicator, View} from 'react-native';
-import {COLORS} from 'theme/theme';
 import AppStack from 'navigators/AppStack';
 import AuthStack from 'navigators/AuthStack';
 import Loading from 'components/Loading';

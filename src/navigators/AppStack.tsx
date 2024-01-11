@@ -5,11 +5,10 @@ import BookingFormScreen from 'screens/BookingFormScreen';
 import BookingSuccessScreen from 'screens/BookingSuccessScreen';
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {createDrawerNavigator} from '@react-navigation/drawer';
 import OrderDetailScreen from 'screens/OrderDetailScreen';
-import TabDrawer from './TabDrawer';
+import ProfileScreen from 'screens/ProfileScreen';
+import ChangePasswordScreen from 'screens/ChangePasswordScreen';
 const Stack = createNativeStackNavigator();
-const Drawer = createDrawerNavigator();
 const AppStack = () => {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
@@ -42,6 +41,16 @@ const AppStack = () => {
         name="OrderDetail"
         component={OrderDetailScreen}
         options={{animation: 'slide_from_right'}}
+      />
+      <Stack.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{animation: 'flip'}}
+      />
+      <Stack.Screen
+        name="ChangePassword"
+        component={ChangePasswordScreen}
+        options={{animation: 'flip'}}
       />
     </Stack.Navigator>
   );

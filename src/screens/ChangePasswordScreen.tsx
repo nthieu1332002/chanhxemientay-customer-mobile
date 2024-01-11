@@ -2,61 +2,54 @@ import {Keyboard, StyleSheet, Text, View} from 'react-native';
 import React, {useCallback, useState} from 'react';
 import HeaderBar from 'components/HeaderBar';
 import {COLORS} from 'theme/theme';
-import {useAuth} from 'context/AuthContext';
 import Input from 'components/Input';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import {emailPattern, phoneNumberPattern} from 'data/constants';
 import axios from 'lib/axios';
 import {useToast} from 'react-native-toast-notifications';
 type FieldType = {
-  name: string;
-  phone: string;
-  email: string;
+  password: string;
+  new_password: string;
+  new_password_confirmation: string;
 };
-const ProfileScreen = () => {
-  const {userInfo, update} = useAuth();
+const ChangePasswordScreen = () => {
   const toast = useToast();
   const [inputs, setInputs] = useState<FieldType>({
-    name: userInfo?.name || '',
-    phone: userInfo?.phone || '',
-    email: userInfo?.email || '',
+    password: '',
+    new_password: '',
+    new_password_confirmation: '',
   });
   const [errors, setErrors] = useState<FieldType>();
   const [loading, setLoading] = useState(false);
   const handleSubmit = useCallback(async () => {
     try {
       setLoading(true);
-      const res = await axios.put('/profile/me', inputs);
+      const res = await axios.put('/auth/password', inputs);
       if (res.status === 200) {
-        update(inputs.email, inputs.name, inputs.phone);
-        toast.show('Cập nhật thông tin thành công', {type: 'success'});
+        toast.show('Đổi mật khẩu thành công', {type: 'success'});
       }
     } catch (error: any) {
       toast.show(error.response.data.message, {type: 'danger'});
     } finally {
       setLoading(false);
     }
-  }, [inputs, toast, update]);
+  }, [inputs, toast]);
 
   const validate = useCallback(() => {
     Keyboard.dismiss();
     let isValid = true;
-    if (!inputs?.name) {
-      handleError('Họ và tên không được bỏ trống.', 'name');
+    if (!inputs?.password) {
+      handleError('Mật khẩu hiện tại không được bỏ trống.', 'password');
       isValid = false;
     }
-    if (!inputs?.email) {
-      handleError('Email không được bỏ trống.', 'email');
+    if (!inputs?.new_password) {
+      handleError('Mật khẩu không được bỏ trống.', 'new_password');
       isValid = false;
-    } else if (!inputs?.email.match(emailPattern)) {
-      handleError('Email không đúng định dạng.', 'email');
+    } else if (inputs?.new_password.length < 8) {
+      handleError('Mật khẩu phải có ít nhất 8 ký tự.', 'new_password');
       isValid = false;
     }
-    if (!inputs?.phone) {
-      handleError('Số điện thoại không được bỏ trống.', 'phone');
-      isValid = false;
-    } else if (!inputs?.phone.match(phoneNumberPattern)) {
-      handleError('Số điện thoại không đúng định dạng.', 'phone');
+    if (!inputs?.new_password_confirmation.match(inputs?.new_password)) {
+      handleError('Mật khẩu bạn nhập không khớp!', 'new_password_confirmation');
       isValid = false;
     }
     if (isValid) {
@@ -73,50 +66,44 @@ const ProfileScreen = () => {
 
   return (
     <View style={styles.Container}>
-      <HeaderBar title="Cập nhật thông tin" type="back" />
+      <HeaderBar title="Đổi mật khẩu" type="back" />
       <View style={styles.Body}>
-        <Text
-          style={{fontSize: 20, fontWeight: '500', color: COLORS.primaryBlack}}>
-          Thông tin cá nhân
-        </Text>
-        <Text>Quản lý thông tin hồ sơ</Text>
         <View style={styles.Form}>
           <Input
             required
-            defaultValue={userInfo?.name}
-            onChangeText={(text: any) => handleOnchange(text, 'name')}
-            onFocus={() => handleError(null, 'name')}
-            iconName="account-outline"
-            label="Họ và tên"
-            placeholder="Họ và tên"
-            error={errors?.name}
+            onChangeText={(text: any) => handleOnchange(text, 'password')}
+            onFocus={() => handleError(null, 'password')}
+            label="Mật khẩu hiện tại"
+            placeholder="Mật khẩu hiện tại"
+            password
+            error={errors?.password}
           />
           <Input
             required
-            defaultValue={userInfo?.email}
-            onChangeText={(text: string) => handleOnchange(text, 'email')}
-            onFocus={() => handleError(null, 'email')}
-            iconName="email-outline"
-            label="Email"
-            placeholder="Nhập email"
-            error={errors?.email}
+            onChangeText={(text: string) =>
+              handleOnchange(text, 'new_password')
+            }
+            onFocus={() => handleError(null, 'new_password')}
+            label="Mật khẩu mới"
+            placeholder="Nhập mật khẩu mới"
+            password
+            error={errors?.new_password}
           />
           <Input
             required
-            keyboardType="numeric"
-            defaultValue={userInfo?.phone}
-            onChangeText={(text: any) => handleOnchange(text, 'phone')}
-            onFocus={() => handleError(null, 'phone')}
-            iconName="phone-outline"
-            label="Số điện thoại"
-            placeholder="Nhập số điện thoại"
-            error={errors?.phone}
+            onChangeText={(text: any) =>
+              handleOnchange(text, 'new_password_confirmation')
+            }
+            onFocus={() => handleError(null, 'new_password_confirmation')}
+            label="Nhập lại mật khẩu"
+            placeholder="Nhập lại mật khẩu"
+            error={errors?.new_password_confirmation}
+            password
           />
         </View>
         <TouchableOpacity
           onPress={validate}
           disabled={loading}
-
           style={{
             backgroundColor: loading
               ? COLORS.primaryOpacity
@@ -139,7 +126,7 @@ const ProfileScreen = () => {
   );
 };
 
-export default ProfileScreen;
+export default ChangePasswordScreen;
 
 const styles = StyleSheet.create({
   Container: {

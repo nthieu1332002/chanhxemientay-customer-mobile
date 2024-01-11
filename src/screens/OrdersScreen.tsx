@@ -222,6 +222,8 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     fontSize: 16,
     marginTop: 10,
+    color: COLORS.primaryBlack,
+
   },
   InputContainerComponent: {
     flexDirection: 'row',

@@ -11,7 +11,6 @@ import com.facebook.react.defaults.DefaultReactHost.getDefaultReactHost
 import com.facebook.react.defaults.DefaultReactNativeHost
 import com.facebook.react.flipper.ReactNativeFlipper
 import com.facebook.soloader.SoLoader
-// import com.zoontek.rnbootsplash.RNBootSplashPackage
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
 
 class MainApplication : Application(), ReactApplication {
@@ -20,7 +19,7 @@ class MainApplication : Application(), ReactApplication {
       object : DefaultReactNativeHost(this) {
         override fun getPackages(): List<ReactPackage> = PackageList(this).packages.apply {
             // Packages that cannot be autolinked yet can be added manually here, for example:
-	        // add(RNBootSplashPackage())
+
 	        // add(SplashScreenReactPackage())
           }
         

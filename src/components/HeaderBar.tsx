@@ -10,29 +10,32 @@ type TypeProps = 'close' | 'back';
 type Props = {
   title?: string;
   type?: TypeProps;
+  icon?: boolean;
 };
 
-const HeaderBar = ({title, type = 'back'}: Props) => {
-  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
+const HeaderBar = ({title, type = 'back', icon = true}: Props) => {
+  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
   return (
     <View
       style={{
         paddingVertical: 10,
         backgroundColor: COLORS.primaryWhite,
       }}>
-      <TouchableOpacity
-        style={styles.CloseButton}
-        onPress={() => {
-          navigation.pop();
-        }}>
-        <Icon
-          name={type === 'close' ? 'close' : 'arrowleft'}
-          size={16}
-          style={{
-            fontSize: 25,
-          }}
-        />
-      </TouchableOpacity>
+      {icon && (
+        <TouchableOpacity
+          style={styles.CloseButton}
+          onPress={() => {
+            navigation.pop();
+          }}>
+          <Icon
+            name={type === 'close' ? 'close' : 'arrowleft'}
+            size={16}
+            style={{
+              fontSize: 25,
+            }}
+          />
+        </TouchableOpacity>
+      )}
       <Text style={styles.HeaderText}>{title}</Text>
     </View>
   );

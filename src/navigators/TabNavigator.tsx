@@ -7,8 +7,9 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
 
-import ProfileScreen from 'screens/ProfileScreen';
+import AccountScreen from 'screens/AccountScreen';
 import OrdersScreen from 'screens/OrdersScreen';
+import NotificationScreen from 'screens/NotificationScreen';
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
@@ -67,8 +68,31 @@ const TabNavigator = () => {
         }}
       />
       <Tab.Screen
-        name="Profile"
-        component={ProfileScreen}
+        name="Notification"
+        component={NotificationScreen}
+        options={{
+          tabBarIcon: ({focused, color, size}) => (
+            <Feather
+              name="bell"
+              size={18}
+              color={focused ? COLORS.primaryColor : COLORS.primaryGray}
+            />
+          ),
+          tabBarLabel: ({focused}) => (
+            <Text
+              style={{
+                color: focused ? COLORS.primaryColor : COLORS.primaryGray,
+                fontSize: 12,
+                marginBottom: 5
+              }}>
+              Thông báo
+            </Text>
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Account"
+        component={AccountScreen}
         options={{
           tabBarIcon: ({focused, color, size}) => (
             <Icon

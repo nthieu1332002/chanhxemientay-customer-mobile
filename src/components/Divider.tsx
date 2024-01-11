@@ -1,10 +1,20 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 
-const Divider = ({text}: {text?: string}) => {
+const Divider = ({
+  text,
+  marginVertical = 20,
+}: {
+  text?: string;
+  marginVertical?: number;
+}) => {
   return (
     <View
-      style={{flexDirection: 'row', alignItems: 'center', marginVertical: 20}}>
+      style={{
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginVertical: marginVertical,
+      }}>
       <View style={styles.Line} />
       {text && (
         <View>
@@ -29,8 +39,8 @@ export default Divider;
 const styles = StyleSheet.create({
   Line: {
     flex: 1,
-    height: 0.5,
+    height: 0.8,
     backgroundColor: 'gray',
-    opacity: 0.5,
+    opacity: 0.2
   },
 });

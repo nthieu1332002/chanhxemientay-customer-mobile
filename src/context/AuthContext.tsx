@@ -3,12 +3,12 @@ import axios from 'lib/axios';
 import React, {createContext, useContext, useEffect, useState} from 'react';
 
 type UserInfoProps = {
-  id: number;
-  name: string;
-  phone: string;
-  email: string;
-  created_at: string;
-  updated_at: string;
+  id?: number;
+  name?: string;
+  phone?: string;
+  email?: string;
+  created_at?: string;
+  updated_at?: string;
 };
 
 type AuthProps = {
@@ -21,7 +21,7 @@ type AuthProps = {
     email: string,
     password: string,
   ) => Promise<any>;
-
+  update: (email: string, name: string, phone: string) => Promise<any>;
   logout: () => void;
   isLoading?: boolean;
 };
@@ -29,6 +29,7 @@ type AuthProps = {
 const AuthContext = createContext<AuthProps>({
   login: async () => {},
   register: async () => {},
+  update: async () => {},
   logout: () => {},
 });
 
@@ -58,6 +59,17 @@ export const AuthProvider = ({children}: any) => {
     };
     isLoggedIn();
   }, []);
+
+  const update = async (email: string, name: string, phone: string) => {
+    try {
+      const data = {...userInfo, email, name, phone};
+      setUserInfo(data);
+      AsyncStorage.setItem('USER_INFO', JSON.stringify(data));
+    } catch (error) {
+      console.log('error', error);
+    }
+  };
+
   const login = async (indentifier: string, password: string) => {
     try {
       setIsLoading(true);
@@ -125,7 +137,15 @@ export const AuthProvider = ({children}: any) => {
 
   return (
     <AuthContext.Provider
-      value={{login, register, logout, isLoading, accessToken, userInfo}}>
+      value={{
+        login,
+        register,
+        logout,
+        update,
+        isLoading,
+        accessToken,
+        userInfo,
+      }}>
       {children}
     </AuthContext.Provider>
   );
