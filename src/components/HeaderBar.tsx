@@ -11,15 +11,18 @@ type Props = {
   title?: string;
   type?: TypeProps;
   icon?: boolean;
+  border?: boolean;
 };
 
-const HeaderBar = ({title, type = 'back', icon = true}: Props) => {
+const HeaderBar = ({title, type = 'back', icon = true, border}: Props) => {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
   return (
     <View
       style={{
         paddingVertical: 10,
         backgroundColor: COLORS.primaryWhite,
+        borderBottomColor: 'rgba(128, 128, 128, 0.2)',
+        borderBottomWidth: border ? 1 : 0,
       }}>
       {icon && (
         <TouchableOpacity

@@ -7,7 +7,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import ExchangeSVG from 'assets/icons/exchange.svg';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import Divider from 'components/Divider';
 import {useAuth} from 'context/AuthContext';
 
@@ -109,97 +109,101 @@ const AccountScreen = ({navigation}: any) => {
         // type="back"
         icon={false}
       />
-      <View style={styles.Body}>
-        <View style={styles.Section}>
-          <Text style={styles.SectionTitle}>Tiện ích</Text>
-          <View
-            style={{
-              flexDirection: 'row',
-              flexWrap: 'wrap',
-              width: '100%',
-              height: 180,
-            }}>
-            {utilitiesItem.map(item => (
-              <View
-                key={item.id}
-                style={styles.Utilities}
-                onTouchEnd={() =>
-                  navigation.navigate(item.root, {screen: item.screen})
-                }>
-                <View style={styles.Inner}>
-                  <View style={styles.Icon}>{item.icon}</View>
-                  <Text style={styles.UtilitiesText}>{item.name}</Text>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        >
+        <View style={styles.Body}>
+          <View style={styles.Section}>
+            <Text style={styles.SectionTitle}>Tiện ích</Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+                width: '100%',
+                height: 180,
+              }}>
+              {utilitiesItem.map(item => (
+                <View
+                  key={item.id}
+                  style={styles.Utilities}
+                  onTouchEnd={() =>
+                    navigation.navigate(item.root, {screen: item.screen})
+                  }>
+                  <View style={styles.Inner}>
+                    <View style={styles.Icon}>{item.icon}</View>
+                    <Text style={styles.UtilitiesText}>{item.name}</Text>
+                  </View>
                 </View>
-              </View>
-            ))}
+              ))}
+            </View>
           </View>
-        </View>
-        <View style={styles.Section}>
-          <Text style={styles.SectionTitle}>Tài khoản</Text>
+          <View style={styles.Section}>
+            <Text style={styles.SectionTitle}>Tài khoản</Text>
 
-          <View style={styles.MenuContainer}>
-            {accountItem.map(item => (
-              <TouchableOpacity
-                key={item.id}
-                onPress={() => {
-                  if (item.route === 'log-out') {
-                    createTwoButtonAlert();
-                  } else {
-                    navigation.push(item.root, {screen: item.screen});
-                  }
-                }}>
-                <View style={styles.Item}>
-                  <View style={styles.Icon}>
-                    <Feather name={item.icon} size={17} color="black" />
+            <View style={styles.MenuContainer}>
+              {accountItem.map(item => (
+                <TouchableOpacity
+                  key={item.id}
+                  onPress={() => {
+                    if (item.route === 'log-out') {
+                      createTwoButtonAlert();
+                    } else {
+                      navigation.push(item.root, {screen: item.screen});
+                    }
+                  }}>
+                  <View style={styles.Item}>
+                    <View style={styles.Icon}>
+                      <Feather name={item.icon} size={17} color="black" />
+                    </View>
+                    <Text style={{color: COLORS.primaryBlack, fontSize: 15}}>
+                      {item.name}
+                    </Text>
+                    <FontAwesome
+                      name="angle-right"
+                      size={18}
+                      color="black"
+                      style={{marginLeft: 'auto'}}
+                    />
                   </View>
-                  <Text style={{color: COLORS.primaryBlack, fontSize: 15}}>
-                    {item.name}
-                  </Text>
-                  <FontAwesome
-                    name="angle-right"
-                    size={18}
-                    color="black"
-                    style={{marginLeft: 'auto'}}
-                  />
-                </View>
-                {accountItem.length !== item.id && (
-                  <View style={{paddingLeft: 16}}>
-                    <Divider marginVertical={0} />
+                  {accountItem.length !== item.id && (
+                    <View style={{paddingLeft: 16}}>
+                      <Divider marginVertical={0} />
+                    </View>
+                  )}
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+          <View style={styles.Section}>
+            <Text style={styles.SectionTitle}>Hỗ trợ</Text>
+            <View style={styles.MenuContainer}>
+              {supportItem.map(item => (
+                <TouchableOpacity key={item.id}>
+                  <View style={styles.Item}>
+                    <View style={styles.Icon}>
+                      <Feather name={item.icon} size={17} color="black" />
+                    </View>
+                    <Text style={{color: COLORS.primaryBlack, fontSize: 15}}>
+                      {item.name}
+                    </Text>
+                    <FontAwesome
+                      name="angle-right"
+                      size={18}
+                      color="black"
+                      style={{marginLeft: 'auto'}}
+                    />
                   </View>
-                )}
-              </TouchableOpacity>
-            ))}
+                  {supportItem.length !== item.id && (
+                    <View style={{paddingLeft: 16}}>
+                      <Divider marginVertical={0} />
+                    </View>
+                  )}
+                </TouchableOpacity>
+              ))}
+            </View>
           </View>
         </View>
-        <View style={styles.Section}>
-          <Text style={styles.SectionTitle}>Hỗ trợ</Text>
-          <View style={styles.MenuContainer}>
-            {supportItem.map(item => (
-              <TouchableOpacity key={item.id}>
-                <View style={styles.Item}>
-                  <View style={styles.Icon}>
-                    <Feather name={item.icon} size={17} color="black" />
-                  </View>
-                  <Text style={{color: COLORS.primaryBlack, fontSize: 15}}>
-                    {item.name}
-                  </Text>
-                  <FontAwesome
-                    name="angle-right"
-                    size={18}
-                    color="black"
-                    style={{marginLeft: 'auto'}}
-                  />
-                </View>
-                {supportItem.length !== item.id && (
-                  <View style={{paddingLeft: 16}}>
-                    <Divider marginVertical={0} />
-                  </View>
-                )}
-              </TouchableOpacity>
-            ))}
-          </View>
-        </View>
-      </View>
+      </ScrollView>
     </View>
   );
 };

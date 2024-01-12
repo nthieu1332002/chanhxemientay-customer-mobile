@@ -26,11 +26,10 @@ type Order = {
   can_be_cancelled: boolean;
 };
 const OrdersScreen = ({navigation}: any) => {
-  const [loading, setLoading] = useState(false);
-  const [orders, setOrders] = useState<Order[]>();
+  const [loading, setLoading] = useState(true);
+  const [orders, setOrders] = useState<Order[]>([]);
   const [status, setStatus] = useState('');
   const [code, setCode] = useState('');
-  const [refreshing, setRefreshing] = useState(false);
 
   const fetchOrders = debounce(async () => {
     setLoading(true);
@@ -57,7 +56,7 @@ const OrdersScreen = ({navigation}: any) => {
   });
   useEffect(() => {
     fetchOrders();
-  }, []);
+  }, [code, status]);
 
   const onRefresh = useCallback(() => {
     fetchOrders();
@@ -126,7 +125,7 @@ const OrdersScreen = ({navigation}: any) => {
       <View style={{paddingHorizontal: 20, flex: 1}}>
         {loading ? (
           <Loading />
-        ) : orders?.length ? (
+        ) : orders.length > 0 ? (
           <FlatList
             showsVerticalScrollIndicator={false}
             data={orders}
@@ -193,7 +192,7 @@ const OrdersScreen = ({navigation}: any) => {
             )}
           />
         ) : (
-          <Empty text="Không có đơn hàng nào" />
+          <Empty text="Không có đơn hàng nào" onRefresh={onRefresh}/>
         )}
       </View>
     </View>
