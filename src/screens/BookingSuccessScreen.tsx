@@ -66,7 +66,7 @@ const BookingSuccessScreen = ({navigation, route}: any) => {
         </View>
       </View>
       <View style={{flexDirection: 'column', gap: 10, marginTop: 'auto'}}>
-        <TouchableOpacity onPress={() => {}} style={styles.Button}>
+        <TouchableOpacity onPress={() => {navigation.replace('OrderDetail', {code: code});}} style={styles.Button}>
           <Text style={styles.ButtonText}>Theo dõi đơn hàng</Text>
         </TouchableOpacity>
         <TouchableOpacity

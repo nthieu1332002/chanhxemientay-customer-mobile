@@ -4,7 +4,7 @@ import {COLORS} from 'theme/theme';
 import AntDesign from 'react-native-vector-icons/AntDesign'
 const NotiDetail = ({item, dismiss}: any) => {
   return (
-    <View style={styles.Container}>
+    <View>
       <View style={styles.Image} onTouchEnd={dismiss}>
         <Image
           source={require('assets/welcome.png')}
@@ -30,8 +30,6 @@ const NotiDetail = ({item, dismiss}: any) => {
 export default NotiDetail;
 
 const styles = StyleSheet.create({
-  Container: {
-  },
   Image: {
     width: '100%',
     height: 200,

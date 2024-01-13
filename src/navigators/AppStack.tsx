@@ -8,6 +8,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import OrderDetailScreen from 'screens/OrderDetailScreen';
 import ProfileScreen from 'screens/ProfileScreen';
 import ChangePasswordScreen from 'screens/ChangePasswordScreen';
+import PaymentHistoryScreen from 'screens/PaymentHistoryScreen';
 const Stack = createNativeStackNavigator();
 const AppStack = () => {
   return (
@@ -50,6 +51,11 @@ const AppStack = () => {
       <Stack.Screen
         name="ChangePassword"
         component={ChangePasswordScreen}
+        options={{animation: 'flip'}}
+      />
+      <Stack.Screen
+        name="PaymentHistory"
+        component={PaymentHistoryScreen}
         options={{animation: 'flip'}}
       />
     </Stack.Navigator>

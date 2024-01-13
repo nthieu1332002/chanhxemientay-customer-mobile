@@ -22,8 +22,8 @@ const utilitiesItem = [
         color="#d87811"
       />
     ),
-    root: 'Tab',
-    screen: 'Orders',
+    root: 'Orders',
+    screen: '',
   },
   {
     id: 2,
@@ -42,7 +42,7 @@ const utilitiesItem = [
     id: 3,
     name: 'Lịch sử giao dịch',
     icon: <ExchangeSVG height={30} width={30} />,
-    root: '',
+    root: 'PaymentHistory',
     screen: '',
   },
   {
