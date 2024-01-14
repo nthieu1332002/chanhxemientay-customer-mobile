@@ -1,81 +1,37 @@
+![image desc](./src/assets/logo.png)
+# Introduction
 
-# Package installation
+This repository is a part of the official [ChanhXeMientay]('https://chanhxemientay.vercel.app/') project - a 5-month final capstone project of a FPT student team.
 
-npm install @react-navigation/native react-navigation/native-stack react-native-vector-icons zustand react-native-screens react-native-safe-area-context lottie-react-native
-# Getting Started
+ChanhXeMientay is a platform that connects 'Nhà chành' with customers, allows to search flexibly for routes that matched by ChanhXeMientay system. And help not only customers but also 'Nhà chành' be able manage their features modernly and easily with the extremely cheap fee.
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+## Features
+   - Authentication
+   - Search routes
+   - Booking
+   - Order details
+   - Tracking orders
+   - Tracking payments
+   - View notifications
+   - Account settings
+## Screenshots
+<p>
+   <img src="https://res.cloudinary.com/dad0fircy/image/upload/v1705215581/capstone/cb484b5d-8e86-4314-a969-278d376da57f_wdbaqy.jpg" alt="Welcome screen" width="200">
+   <img src="https://res.cloudinary.com/dad0fircy/image/upload/v1705216393/capstone/2_lntz6r.jpg" alt="Login screen" width="200">
+   <img src="https://res.cloudinary.com/dad0fircy/image/upload/v1705216393/capstone/1_ihfdcv.jpg" alt="Register screen" width="200">
+   <img src="https://res.cloudinary.com/dad0fircy/image/upload/v1705216393/capstone/3_tggrpd.jpg" alt="Home screen" width="200">
+   <img src="https://res.cloudinary.com/dad0fircy/image/upload/v1705216393/capstone/4_ifxnu9.jpg" alt="Search screen" width="200">
+   <img src="https://res.cloudinary.com/dad0fircy/image/upload/v1705216394/capstone/5_ymf6dj.jpg" alt="Search list routes screen" width="200">
+   <img src="https://res.cloudinary.com/dad0fircy/image/upload/v1705216394/capstone/6_vawwot.jpg" alt="Route detail screen" width="200">
+   <img src="https://res.cloudinary.com/dad0fircy/image/upload/v1705216394/capstone/7_r2vvs7.jpg" alt="Booking form screen" width="200">
+   <img src="https://res.cloudinary.com/dad0fircy/image/upload/v1705216394/capstone/8_hhdtvv.jpg" alt="Booking successfully screen" width="200">
+   <img src="https://res.cloudinary.com/dad0fircy/image/upload/v1705216394/capstone/9_tj6pfc.jpg" alt="Order list screen" width="200">
+   <img src="https://res.cloudinary.com/dad0fircy/image/upload/v1705216394/capstone/10_gsbuyl.jpg" alt="Order detail screen" width="200">
+   <img src="https://res.cloudinary.com/dad0fircy/image/upload/v1705216395/capstone/13_ezn82r.jpg" alt="Account screen" width="200">
+   <img src="https://res.cloudinary.com/dad0fircy/image/upload/v1705216395/capstone/11_fpd6j5.jpg" alt="Payment history list screen" width="200">
+   <img src="https://res.cloudinary.com/dad0fircy/image/upload/v1705216395/capstone/12_wuqtj3.jpg" alt="Payment history detail screen" width="200">
+   <img src="https://res.cloudinary.com/dad0fircy/image/upload/v1705216395/capstone/14_x8ryu9.jpg" alt="Notification screen" width="200">
+   <img src="https://res.cloudinary.com/dad0fircy/image/upload/v1705217099/capstone/15_mdfgtl.jpg" alt="Update profile screen" width="200">
+   <img src="https://res.cloudinary.com/dad0fircy/image/upload/v1705217099/capstone/16_xm2fee.jpg" alt="Change password screen" width="200">
+</p>
 
-## Step 1: Start the Metro Server
-
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
-
-To start Metro, run the following command from the _root_ of your React Native project:
-
-```bash
-# using npm
-npm start
-
-# OR using Yarn
-yarn start
-```
-
-## Step 2: Start your Application
-
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
-
-### For Android
-
-```bash
-# using npm
-npm run android
-
-# OR using Yarn
-yarn android
-```
-
-### For iOS
-
-```bash
-# using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
-```
-
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
-
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
-
-## Step 3: Modifying your App
-
-Now that you have successfully run the app, let's modify it.
-
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
-
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
