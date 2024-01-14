@@ -77,8 +77,8 @@ const styles = StyleSheet.create({
   },
   Price: {
     backgroundColor: COLORS.primaryColor,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
+    paddingHorizontal: 5,
+    paddingVertical: 3,
     borderRadius: 50,
   },
   Detail: {

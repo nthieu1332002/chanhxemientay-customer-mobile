@@ -50,21 +50,4 @@ const AuthStack = () => {
   }
 };
 
-const Auth = () => {
-  return (
-    <>
-      <Stack.Screen
-        name="Login"
-        component={LoginScreen}
-        options={{animation: 'slide_from_right'}}
-      />
-      <Stack.Screen
-        name="Register"
-        component={RegisterScreen}
-        options={{animation: 'slide_from_right'}}
-      />
-    </>
-  );
-};
-
 export default AuthStack;

@@ -14,80 +14,8 @@ import PaymentDetail from 'components/PaymentDetail';
 import BackDrop from 'components/BackDrop';
 import Empty from 'components/Empty';
 import axios from 'lib/axios';
-const data = [
-  {
-    id: 1,
-    payment_method: 0,
-    vnpay_transaction_code: 0,
-    order_code: 'CD1A7E9169',
-    value: 312122,
-    created_at: '2023-12-17T16:05:46.000000Z',
-  },
-  {
-    id: 2,
-    payment_method: 0,
-    vnpay_transaction_code: null,
-    order_code: '48D9B7EFB2',
-    value: 312122,
-    created_at: '2023-12-17T16:05:46.000000Z',
-  },
-  {
-    id: 3,
-    payment_method: 0,
-    vnpay_transaction_code: 0,
-    order_code: 'CD1A7E9169',
-    value: 312122,
-    created_at: '2023-12-17T16:05:46.000000Z',
-  },
-  {
-    id: 4,
-    payment_method: 0,
-    vnpay_transaction_code: 0,
-    order_code: '48D9B7EFB2',
-    value: 312122,
-    created_at: '2023-12-17T16:05:46.000000Z',
-  },
-  {
-    id: 5,
-    payment_method: 0,
-    vnpay_transaction_code: 0,
-    order_code: 'CD1A7E9169',
-    value: 312122,
-    created_at: '2023-12-17T16:05:46.000000Z',
-  },
-  {
-    id: 6,
-    payment_method: 0,
-    vnpay_transaction_code: 0,
-    order_code: '48D9B7EFB2',
-    value: 312122,
-    created_at: '2023-12-17T16:05:46.000000Z',
-  },
-  {
-    id: 7,
-    payment_method: 0,
-    vnpay_transaction_code: 0,
-    order_code: '48D9B7EFB2',
-    value: 312122,
-    created_at: '2023-12-17T16:05:46.000000Z',
-  },
-  {
-    id: 8,
-    payment_method: 0,
-    vnpay_transaction_code: 0,
-    order_code: '48D9B7EFB2',
-    value: 312122,
-    created_at: '2023-12-17T16:05:46.000000Z',
-  },
-  {
-    id: 9,
-    payment_method: 0,
-    vnpay_transaction_code: 0,
-    order_code: '48D9B7EFB2',
-    value: 312122,
-    created_at: '2023-12-17T16:05:46.000000Z',
-  },
-];
+import Loading from 'components/Loading';
+
 type Payment = {
   id: string;
   type: string;
@@ -126,10 +54,8 @@ const PaymentHistoryScreen = () => {
   return (
     <View style={styles.ScreenContainer}>
       <HeaderBar title="Lịch sử giao dịch" border />
-
-      {data.length < 0 ? (
-        <Empty text="Không có giao dịch nào" onRefresh={onRefresh} />
-      ) : (
+      {loading && <Loading/>}
+      {data.length > 0 ? (
         <FlatList
           showsHorizontalScrollIndicator={false}
           data={data}
@@ -185,6 +111,8 @@ const PaymentHistoryScreen = () => {
             </TouchableOpacity>
           )}
         />
+        ) : (
+        <Empty text="Không có giao dịch nào" onRefresh={onRefresh} />
       )}
       <BottomSheetModal
         handleStyle={{display: 'none'}}
@@ -204,8 +132,8 @@ export default PaymentHistoryScreen;
 
 const styles = StyleSheet.create({
   ScreenContainer: {
-    paddingBottom: 40,
     backgroundColor: COLORS.primaryWhite,
+    flex: 1,
   },
   Item: {
     paddingVertical: 20,

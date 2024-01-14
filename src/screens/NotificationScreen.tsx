@@ -39,7 +39,7 @@ const NotificationScreen = () => {
   const {dismissAll} = useBottomSheetModal();
   const [data, setData] = useState<Notification[]>([]);
   const [noti, setNoti] = useState<Notification>();
-
+  console.log('data', data.length);
   const fetchNoti = async () => {
     try {
       const res = await axios.get('/notifications');
@@ -59,9 +59,7 @@ const NotificationScreen = () => {
     <View style={styles.ScreenContainer}>
       <HeaderBar title="Thông báo" icon={false} border />
 
-      {data.length < 0 ? (
-        <Empty text="Không có thông báo nào" onRefresh={onRefresh} />
-      ) : (
+      {data.length > 0 ? (
         <FlatList
           showsHorizontalScrollIndicator={false}
           data={data}
@@ -112,6 +110,8 @@ const NotificationScreen = () => {
             </>
           )}
         />
+      ) : (
+        <Empty text="Không có thông báo nào" onRefresh={onRefresh} />
       )}
       <BottomSheetModal
         handleStyle={{display: 'none'}}
@@ -131,8 +131,8 @@ export default NotificationScreen;
 
 const styles = StyleSheet.create({
   ScreenContainer: {
-    paddingBottom: 40,
     backgroundColor: COLORS.primaryWhite,
+    flex: 1,
   },
   Item: {
     paddingVertical: 20,

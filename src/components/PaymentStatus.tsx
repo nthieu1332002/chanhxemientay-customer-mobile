@@ -11,10 +11,10 @@ const PaymentStatus = ({status}: Props) => {
       style={[
         styles.Container,
         {
-          backgroundColor: status === 1 ? COLORS.redOpacity : COLORS.greenOpacity
+          backgroundColor: status === 0 ? COLORS.redOpacity : COLORS.greenOpacity
         },
       ]}>
-      <Text style={{ fontWeight: '500',fontSize: 12.5, color: status === 1 ? 'red' : 'green'}}>{status === 1 ?  'Chưa thanh toán': 'Đã thanh toán'}</Text>
+      <Text style={{ fontWeight: '500',fontSize: 12.5, color: status === 0 ? 'red' : 'green'}}>{status === 0 ?  'Chưa thanh toán': 'Đã thanh toán'}</Text>
     </View>
   );
 };

@@ -137,7 +137,7 @@ const OrderDetailScreen = ({route}: any) => {
                   style={{height: 'auto', maxWidth: '100%', width: '100%'}}
                   viewBox={`0 0 164 164`}
                 />
-                <Text style={{color: COLORS.primaryBlack}}>
+                <Text style={{color: COLORS.primaryBlack, textTransform: 'uppercase'}}>
                   {detail?.receive_token}
                 </Text>
               </View>

@@ -79,7 +79,7 @@ const BookingFormScreen = ({navigation, route}: any) => {
   const [sizePrice, setSizePrice] = useState(0);
   const totalPrice = insurance + sizePrice;
   const snapPoints = useMemo(
-    () => [135 + bottomSafeArea, '35%', '100%'],
+    () => [135 + bottomSafeArea, '30%', '100%'],
     [bottomSafeArea],
   );
 
