@@ -1,7 +1,11 @@
 import {Image, StyleSheet, Text, View} from 'react-native';
-import React, {useCallback, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import HeaderBar from 'components/HeaderBar';
-import {FlatList, RefreshControl, TouchableOpacity} from 'react-native-gesture-handler';
+import {
+  FlatList,
+  RefreshControl,
+  TouchableOpacity,
+} from 'react-native-gesture-handler';
 import {COLORS} from 'theme/theme';
 import Divider from 'components/Divider';
 import dayjs from 'dayjs';
@@ -14,87 +18,49 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import NotiDetail from 'components/NotiDetail';
 import BackDrop from 'components/BackDrop';
 import Empty from 'components/Empty';
-const data = [
-  {
-    id: 1,
-    header: 'Trải nghiệm tại nhà hôm nay thế nào?',
-    content:
-      'Ngày 15/01/2024, CXMT chính thức ra mắt phiên bản App mới với mong muốn tối ưu trải nghiệm người dùng. Bạn cập nhật phiên bản App mới theo đường link:',
-    time: '2023-12-17T16:05:46.000000Z',
-  },
-  {
-    id: 2,
-    header: 'Thông báo 1',
-    content:
-      'Ngày 15/01/2024, CXMT chính thức ra mắt phiên bản App mới với mong muốn tối ưu trải nghiệm người dùng. Bạn cập nhật phiên bản App mới theo đường link:',
-    time: '2023-12-17T16:05:46.000000Z',
-  },
-  {
-    id: 3,
-    header:
-      'Trải nghiệm tại nhà hôm nay thế nào? Trải nghiệm tại nhà hôm nay thế nào?',
-    content:
-      'Ngày 15/01/2024, CXMT chính thức ra mắt phiên bản App mới với mong muốn tối ưu trải nghiệm người dùng. Bạn cập nhật phiên bản App mới theo đường link:',
-    time: '2023-12-17T16:05:46.000000Z',
-  },
-  {
-    id: 4,
-    header: 'Thông báo 1',
-    content:
-      'Ngày 15/01/2024, CXMT chính thức ra mắt phiên bản App mới với mong muốn tối ưu trải nghiệm người dùng. Bạn cập nhật phiên bản App mới theo đường link:',
-    time: '2023-12-17T16:05:46.000000Z',
-  },
-  {
-    id: 5,
-    header: 'Trải nghiệm tại nhà hôm nay thế nào?',
-    content:
-      'Ngày 15/01/2024, CXMT chính thức ra mắt phiên bản App mới với mong muốn tối ưu trải nghiệm người dùng. Bạn cập nhật phiên bản App mới theo đường link:',
-    time: '2023-12-17T16:05:46.000000Z',
-  },
-  {
-    id: 6,
-    header: 'Thông báo 1',
-    content:
-      'Ngày 15/01/2024, CXMT chính thức ra mắt phiên bản App mới với mong muốn tối ưu trải nghiệm người dùng. Bạn cập nhật phiên bản App mới theo đường link:',
-    time: '2023-12-17T16:05:46.000000Z',
-  },
-  {
-    id: 7,
-    header: 'Thông báo 1',
-    content:
-      'Ngày 15/01/2024, CXMT chính thức ra mắt phiên bản App mới với mong muốn tối ưu trải nghiệm người dùng. Bạn cập nhật phiên bản App mới theo đường link:',
-    time: '2023-12-17T16:05:46.000000Z',
-  },
-  {
-    id: 8,
-    header: 'Thông báo 1',
-    content:
-      'Ngày 15/01/2024, CXMT chính thức ra mắt phiên bản App mới với mong muốn tối ưu trải nghiệm người dùng. Bạn cập nhật phiên bản App mới theo đường link:',
-    time: '2023-12-17T16:05:46.000000Z',
-  },
-  {
-    id: 9,
-    header: 'Thông báo 1',
-    content:
-      'Ngày 15/01/2024, CXMT chính thức ra mắt phiên bản App mới với mong muốn tối ưu trải nghiệm người dùng. Bạn cập nhật phiên bản App mới theo đường link:',
-    time: '2023-12-17T16:05:46.000000Z',
-  },
-];
+import axios from 'lib/axios';
+export type Notification = {
+  id: string;
+  type: string;
+  attributes: {
+    type: string;
+    data: {
+      content: string;
+      order_code: string;
+    };
+    read_at: string;
+    created_at: string;
+  };
+};
 
 const NotificationScreen = () => {
   const {bottom: bottomSafeArea} = useSafeAreaInsets();
   const notiDetailRef = useRef<BottomSheetModal>(null);
   const {dismissAll} = useBottomSheetModal();
-  const [noti, setNoti] = useState();
+  const [data, setData] = useState<Notification[]>([]);
+  const [noti, setNoti] = useState<Notification>();
+
+  const fetchNoti = async () => {
+    try {
+      const res = await axios.get('/notifications');
+      setData(res.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    fetchNoti();
+  }, []);
+
   const onRefresh = () => {
-    
-  }
+    fetchNoti();
+  };
   return (
     <View style={styles.ScreenContainer}>
       <HeaderBar title="Thông báo" icon={false} border />
 
       {data.length < 0 ? (
-          <Empty text="Không có thông báo nào" onRefresh={onRefresh}/>
+        <Empty text="Không có thông báo nào" onRefresh={onRefresh} />
       ) : (
         <FlatList
           showsHorizontalScrollIndicator={false}
@@ -111,7 +77,7 @@ const NotificationScreen = () => {
               <TouchableOpacity
                 style={styles.Item}
                 onPress={() => {
-                  setNoti(item as any);
+                  setNoti(item);
                   notiDetailRef.current?.present();
                 }}>
                 <View style={styles.FlexBox}>
@@ -130,14 +96,14 @@ const NotificationScreen = () => {
                   <View style={{width: SCREEN_WIDTH - 80, paddingRight: 5}}>
                     <View style={styles.Header}>
                       <Text style={styles.HeaderText} numberOfLines={2}>
-                        {item.header}
+                        Trạng thái đơn hàng {item.attributes.data.order_code}
                       </Text>
                       <Text style={styles.Time}>
-                        {dayjs(item.time).format('DD/MM')}
+                        {dayjs(item.attributes.created_at).format('DD/MM')}
                       </Text>
                     </View>
                     <Text style={styles.ContentText} numberOfLines={2}>
-                      {item.content}
+                      {item.attributes.data.content}
                     </Text>
                   </View>
                 </View>

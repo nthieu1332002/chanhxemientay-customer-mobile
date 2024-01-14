@@ -1,8 +1,15 @@
 import {Image, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {COLORS} from 'theme/theme';
-import AntDesign from 'react-native-vector-icons/AntDesign'
-const NotiDetail = ({item, dismiss}: any) => {
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import {Notification} from 'screens/NotificationScreen';
+const NotiDetail = ({
+  item,
+  dismiss,
+}: {
+  item?: Notification;
+  dismiss: () => void;
+}) => {
   return (
     <View>
       <View style={styles.Image} onTouchEnd={dismiss}>
@@ -15,13 +22,18 @@ const NotiDetail = ({item, dismiss}: any) => {
           }}
           resizeMode="center"
         />
-        <AntDesign name="closecircle" size={30} color="gray" style={styles.CloseButton}/>
-
+        <AntDesign
+          name="closecircle"
+          size={30}
+          color="gray"
+          style={styles.CloseButton}
+        />
       </View>
       <View style={styles.Body}>
-
-      <Text style={styles.Header}>{item.header}</Text>
-      <Text style={styles.Content}>{item.content}</Text>
+        <Text style={styles.Header}>
+          Trạng thái đơn hàng {item?.attributes.data.order_code}
+        </Text>
+        <Text style={styles.Content}>{item?.attributes.data.content}</Text>
       </View>
     </View>
   );
@@ -34,7 +46,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 200,
   },
-  CloseButton:{
+  CloseButton: {
     position: 'absolute',
     right: 10,
     top: 10,
@@ -43,7 +55,6 @@ const styles = StyleSheet.create({
     paddingVertical: 30,
     paddingHorizontal: 20,
     gap: 25,
-
   },
   Header: {
     color: COLORS.primaryBlack,
