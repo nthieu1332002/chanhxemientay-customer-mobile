@@ -57,14 +57,14 @@ export type OrderDetail = {
     status: number;
     achieved_at: string;
   }>;
+  receive_token: string;
 };
 
-const OrderDetailScreen = ({route, navigation}: any) => {
+const OrderDetailScreen = ({route}: any) => {
   const {code} = route.params;
   const [loading, setLoading] = useState(false);
   const [detail, setDetail] = useState<OrderDetail>();
 
-  const qr = 'AE11I23JJDO21JHC';
   const fetchOrderDetail = useCallback(async () => {
     setLoading(true);
     try {
@@ -92,7 +92,11 @@ const OrderDetailScreen = ({route, navigation}: any) => {
         <ScrollView
           showsVerticalScrollIndicator={false}
           refreshControl={
-            <RefreshControl colors={[COLORS.primaryColor]} refreshing={false} onRefresh={onRefresh} />
+            <RefreshControl
+              colors={[COLORS.primaryColor]}
+              refreshing={false}
+              onRefresh={onRefresh}
+            />
           }>
           <View style={styles.Content}>
             <View style={styles.Row}>
@@ -125,15 +129,19 @@ const OrderDetailScreen = ({route, navigation}: any) => {
               </View>
               <PaymentStatus status={detail?.is_paid ? 1 : 0} />
             </View>
-            <View style={styles.QRContainer}>
-              <QRCode
-                value={qr}
-                size={164}
-                style={{height: 'auto', maxWidth: '100%', width: '100%'}}
-                viewBox={`0 0 164 164`}
-              />
-              <Text style={{color: COLORS.primaryBlack}}>{qr}</Text>
-            </View>
+            {detail?.receive_token && (
+              <View style={styles.QRContainer}>
+                <QRCode
+                  value={detail?.receive_token}
+                  size={164}
+                  style={{height: 'auto', maxWidth: '100%', width: '100%'}}
+                  viewBox={`0 0 164 164`}
+                />
+                <Text style={{color: COLORS.primaryBlack}}>
+                  {detail?.receive_token}
+                </Text>
+              </View>
+            )}
             <View style={styles.Section}>
               <View
                 style={[
