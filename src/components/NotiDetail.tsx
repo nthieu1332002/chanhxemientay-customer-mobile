@@ -31,7 +31,7 @@ const NotiDetail = ({
       </View>
       <View style={styles.Body}>
         <Text style={styles.Header}>
-          Trạng thái đơn hàng {item?.attributes.data.order_code}
+          Trạng thái đơn hàng <Text style={{textTransform: 'uppercase'}}>{item?.attributes.data.order_code}</Text>
         </Text>
         <Text style={styles.Content}>{item?.attributes.data.content}</Text>
       </View>

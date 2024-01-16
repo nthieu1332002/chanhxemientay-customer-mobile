@@ -39,7 +39,6 @@ const NotificationScreen = () => {
   const {dismissAll} = useBottomSheetModal();
   const [data, setData] = useState<Notification[]>([]);
   const [noti, setNoti] = useState<Notification>();
-  console.log('data', data.length);
   const fetchNoti = async () => {
     try {
       const res = await axios.get('/notifications');
@@ -91,10 +90,10 @@ const NotificationScreen = () => {
                       resizeMode="center"
                     />
                   </View>
-                  <View style={{width: SCREEN_WIDTH - 80, paddingRight: 5}}>
+                  <View style={{}}>
                     <View style={styles.Header}>
                       <Text style={styles.HeaderText} numberOfLines={2}>
-                        Trạng thái đơn hàng {item.attributes.data.order_code}
+                        Trạng thái đơn hàng <Text style={{textTransform: 'uppercase'}}>{item.attributes.data.order_code}</Text>
                       </Text>
                       <Text style={styles.Time}>
                         {dayjs(item.attributes.created_at).format('DD/MM')}
@@ -138,11 +137,11 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     paddingHorizontal: 10,
     backgroundColor: COLORS.primaryWhite,
+    width: '100%',
   },
   FlexBox: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
     width: '100%',
     gap: 5,
   },
@@ -155,21 +154,21 @@ const styles = StyleSheet.create({
   Header: {
     marginBottom: 4,
     flexDirection: 'row',
+    gap: 5,
   },
   HeaderText: {
     color: COLORS.primaryBlack,
     fontWeight: '500',
     fontSize: 16,
-    width: '90%',
   },
   Time: {
     fontSize: 12.5,
     fontWeight: 'normal',
-    marginLeft: 'auto',
     color: COLORS.primaryGray,
+    marginLeft: 'auto',
   },
   ContentText: {
-    fontSize: 13,
+    fontSize: 14,
     color: COLORS.primaryGray,
   },
 });

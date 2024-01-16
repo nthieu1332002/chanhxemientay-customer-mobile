@@ -18,16 +18,24 @@ export const getRecentSearch = async (key: string) => {
 
 type Props = {
   horizontal?: boolean;
+  refreshing?: boolean;
+  setRefreshing?:(value: boolean) => void
 };
 
-const RecentSearch = ({horizontal}: Props) => {
+const RecentSearch = ({horizontal, refreshing, setRefreshing}: Props) => {
   const [recent, setRecent] = useState<any>([]);
+  const fetchRecentSearch = async () => {
+    const a = await getRecentSearch('search');
+    setRecent(a.reverse());
+  };
   useEffect(() => {
-    const fetRecentSearch = async () => {
-      const a = await getRecentSearch('search');
-      setRecent(a.reverse());
-    };
-    fetRecentSearch();
+    if (refreshing && setRefreshing) {
+      fetchRecentSearch();
+      setRefreshing(false);
+    }
+  }, [refreshing, setRefreshing]);
+  useEffect(() => {
+    fetchRecentSearch();
   }, []);
   return (
     <View

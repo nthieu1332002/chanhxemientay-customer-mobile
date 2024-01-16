@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useCallback } from 'react';
+import React, {useCallback, useState} from 'react';
 import {COLORS} from 'theme/theme';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Avatar from 'components/Avatar';
@@ -18,9 +18,7 @@ import {RefreshControl} from 'react-native-gesture-handler';
 
 const HomeScreen = ({navigation}: any) => {
   const {userInfo} = useAuth();
-  const onRefresh = useCallback(() => {
-
-  }, []);
+  const [refreshing, setRefreshing] = useState(false);
   return (
     <View style={styles.ScreenContainer}>
       <StatusBar backgroundColor={COLORS.primaryColor} />
@@ -38,7 +36,7 @@ const HomeScreen = ({navigation}: any) => {
           <RefreshControl
             colors={[COLORS.primaryColor]}
             refreshing={false}
-            onRefresh={onRefresh}
+            onRefresh={() => setRefreshing(true)}
           />
         }>
         <View style={styles.Body}>
@@ -62,8 +60,8 @@ const HomeScreen = ({navigation}: any) => {
           </TouchableOpacity>
           <SaleSection />
         </View>
-        <RecentSearch horizontal />
-        <PartnerList />
+        <RecentSearch refreshing={refreshing} setRefreshing={setRefreshing} horizontal />
+        <PartnerList refreshing={refreshing} setRefreshing={setRefreshing}/>
       </ScrollView>
     </View>
   );

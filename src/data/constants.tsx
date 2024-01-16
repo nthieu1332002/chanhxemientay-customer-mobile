@@ -48,14 +48,14 @@ export const OrderStatus = [
     color: 'red',
   },
 ];
-export const OrderStatusMap: { [key: number]: string } = {
-  0: "đã được tạo",
-  1: "đã được tiếp nhận tại",
-  2: "đã xuất phát khỏi",
-  3: "đã đến",
-  4: "đã giao hàng thành công tại",
-  5: "đã hủy",
-  6: "đã được xác nhận"
+export const OrderStatusMap: {[key: number]: string} = {
+  0: 'đã được tạo',
+  1: 'đã được tiếp nhận tại',
+  2: 'đã xuất phát khỏi',
+  3: 'đã đến',
+  4: 'đã giao hàng thành công tại',
+  5: 'đã hủy',
+  6: 'đã được xác nhận',
 };
 export type LocationType = {
   code: string;
@@ -63,6 +63,11 @@ export type LocationType = {
   path_with_type: string;
 };
 export const locationList: LocationType[] = [
+  {
+    code: '769',
+    parent_code: '79',
+    path_with_type: 'Thành phố Thủ Đức, Thành phố Hồ Chí Minh',
+  },
   {
     code: '760',
     parent_code: '79',
@@ -98,11 +103,7 @@ export const locationList: LocationType[] = [
     parent_code: '79',
     path_with_type: 'Quận Phú Nhuận, Thành phố Hồ Chí Minh',
   },
-  {
-    code: '769',
-    parent_code: '79',
-    path_with_type: 'Thành phố Thủ Đức, Thành phố Hồ Chí Minh',
-  },
+
   {
     code: '770',
     parent_code: '79',

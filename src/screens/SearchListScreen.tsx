@@ -1,6 +1,5 @@
 import {
   ActivityIndicator,
-  Dimensions,
   FlatList,
   StyleSheet,
   Text,
@@ -28,6 +27,7 @@ import {useSharedValue} from 'react-native-reanimated';
 import RouteDetail from 'components/RouteDetail';
 import { SCREEN_HEIGHT } from 'lib/Dimensions';
 import BackDrop from 'components/BackDrop';
+import { RefreshControl } from 'react-native-gesture-handler';
 
 export type Booking = {
   id: number;
@@ -78,34 +78,34 @@ const SearchListScreen = ({navigation, route}: any) => {
     () => [320 + bottomSafeArea],
     [bottomSafeArea],
   );
-  useEffect(() => {
-    const getSearch = async () => {
+  const getSearch = async () => {
+    try {
       setLoading(true);
-      try {
-        const url = qs.stringifyUrl(
-          {
-            url: '/route/search',
-            query: {
-              start_city_code: from.parent_code,
-              start_district_code: from.code,
-              end_city_code: to.parent_code,
-              end_district_code: to.code,
-              package_types: package_types.toString(),
-              number_of_results: 20,
-            },
+      const url = qs.stringifyUrl(
+        {
+          url: '/route/search',
+          query: {
+            start_city_code: from.parent_code,
+            start_district_code: from.code,
+            end_city_code: to.parent_code,
+            end_district_code: to.code,
+            package_types: package_types.toString(),
+            number_of_results: 20,
           },
-          {skipNull: true, skipEmptyString: true},
-        );
-        const res = await axios.get(url);
-        setRoutes(res.data.data);
-      } catch (error) {
-        console.log('Failed to fetch search route', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+        },
+        {skipNull: true, skipEmptyString: true},
+      );
+      const res = await axios.get(url);
+      setRoutes(res.data.data);
+    } catch (error) {
+      console.log('Failed to fetch search route', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
     getSearch();
-  }, [package_types, from, to]);
+  }, []);
 
   const onChooseRoute = useCallback(
     (item: Booking) => {
@@ -154,7 +154,9 @@ const SearchListScreen = ({navigation, route}: any) => {
     ),
     [detail, onChooseRoute],
   );
-
+  const onRefresh = () => {
+    getSearch();
+  };
   return (
     <View style={styles.ScreenContainer}>
       <View style={styles.Header}>
@@ -204,6 +206,13 @@ const SearchListScreen = ({navigation, route}: any) => {
               showsVerticalScrollIndicator={false}
               data={routes}
               contentContainerStyle={[styles.FlatListContainer]}
+              refreshControl={
+                <RefreshControl
+                  colors={[COLORS.primaryColor]}
+                  refreshing={false}
+                  onRefresh={onRefresh}
+                />
+              }
               renderItem={({item}) => (
                 <TouchableOpacity
                   key={item.id}

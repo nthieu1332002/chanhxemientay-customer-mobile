@@ -79,7 +79,7 @@ const OrdersScreen = ({navigation}: any) => {
         style={{
           paddingVertical: 10,
           paddingHorizontal: 20,
-          backgroundColor: COLORS.primaryWhite,
+          backgroundColor: COLORS.secondaryGray,
         }}>
         <FlatList
           horizontal
@@ -132,7 +132,6 @@ const OrdersScreen = ({navigation}: any) => {
             contentContainerStyle={{
               gap: 10,
             }}
-            style={{backgroundColor: COLORS.primaryWhite}}
             refreshControl={
               <RefreshControl colors={[COLORS.primaryColor]} refreshing={false} onRefresh={onRefresh} />
             }
@@ -204,7 +203,7 @@ export default OrdersScreen;
 const styles = StyleSheet.create({
   ScreenContainer: {
     flex: 1,
-    backgroundColor: COLORS.primaryWhite,
+    backgroundColor: COLORS.secondaryGray,
   },
   ScreenHeader: {
     backgroundColor: COLORS.primaryOpacity,
@@ -235,9 +234,17 @@ const styles = StyleSheet.create({
   Item: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: COLORS.secondaryGray,
+    backgroundColor: COLORS.primaryWhite,
     padding: 10,
     borderRadius: 5,
+    shadowColor: COLORS.primaryGray,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 1.41,
+    elevation: 2,
   },
   Code: {
     color: COLORS.primaryBlack,

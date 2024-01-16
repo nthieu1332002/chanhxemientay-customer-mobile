@@ -1,5 +1,6 @@
 import {Image, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
+import { COLORS } from 'theme/theme';
 
 const SaleSection = () => {
   return (
@@ -21,9 +22,18 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     width: '100%',
     overflow: 'hidden',
+    shadowColor: COLORS.primaryGray,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 1.41,
+    elevation: 2,
   },
   Logo: {
     height: '100%',
     width: '100%',
+
   },
 });

@@ -69,7 +69,6 @@ const OrderDetailScreen = ({route}: any) => {
     setLoading(true);
     try {
       const res = await axios.get(`/orders/${code}`);
-      // console.log(res.data.data.attributes);
       setDetail(res.data.data.attributes);
     } catch (error: any) {
       console.log(error.response.data.message);
@@ -129,6 +128,7 @@ const OrderDetailScreen = ({route}: any) => {
               </View>
               <PaymentStatus status={detail?.is_paid ? 1 : 0} />
             </View>
+            <Text style={{textAlign: 'center', color: COLORS.primaryColor}}>Đưa mã này cho nhân viên khi nhận hàng</Text>
             {detail?.receive_token && (
               <View style={styles.QRContainer}>
                 <QRCode
