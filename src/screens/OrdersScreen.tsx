@@ -41,7 +41,7 @@ const OrdersScreen = ({navigation}: any) => {
             'filter[code]': code,
             'filter[status]': status,
             page: 1,
-            per_page: 10,
+            per_page: 15,
           },
         },
         {skipNull: true},
