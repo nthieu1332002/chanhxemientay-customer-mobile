@@ -5,7 +5,21 @@ This repository is a part of the official [ChanhXeMientay](https://chanhxemienta
 
 ChanhXeMientay is a platform that connects 'Nhà chành' with customers, allows to search flexibly for routes that matched by ChanhXeMientay system. And help not only customers but also 'Nhà chành' be able manage their features modernly and easily with the extremely cheap fee.
 
-## Features
+## Order relevant repositories
+
+- Website for customers: https://chanhxemientay.vercel.app/
+
+- Mobile app for customers:
+https://github.com/nthieu1332002/chanhxemientay-customer-mobile/
+
+- Partner / Nhà chành: https://chanhxepartner-k16.vercel.app/
+
+- Admin / staff: https://capstone-project-admin-tungvtse.vercel.app/
+
+- Backend: https://github.com/Lumethys/fpt-capstone-backend/
+
+
+# Features
    - Authentication
    - Search routes
    - Booking
@@ -14,7 +28,8 @@ ChanhXeMientay is a platform that connects 'Nhà chành' with customers, allows 
    - Tracking payments
    - View notifications
    - Account settings
-## Screenshots
+
+# Screenshots
 <p>
    <img src="https://res.cloudinary.com/dad0fircy/image/upload/v1705215581/capstone/cb484b5d-8e86-4314-a969-278d376da57f_wdbaqy.jpg" alt="Welcome screen" width="200">
    <img src="https://res.cloudinary.com/dad0fircy/image/upload/v1705216393/capstone/2_lntz6r.jpg" alt="Login screen" width="200">
