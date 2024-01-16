@@ -1,7 +1,7 @@
 ![image desc](./src/assets/logo.png)
 # Introduction
 
-This repository is a part of the official [ChanhXeMientay]('https://chanhxemientay.vercel.app/') project - a 5-month final capstone project of a FPT student team.
+This repository is a part of the official [ChanhXeMientay](https://chanhxemientay.vercel.app/) project - a 5-month final capstone project of a FPT student team.
 
 ChanhXeMientay is a platform that connects 'Nhà chành' with customers, allows to search flexibly for routes that matched by ChanhXeMientay system. And help not only customers but also 'Nhà chành' be able manage their features modernly and easily with the extremely cheap fee.
 
