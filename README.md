@@ -2,6 +2,7 @@
 # Introduction
 
 This website is designed for customers and is part of the official [ChanhXeMientay](https://chanhxemientay.vercel.app/) project—a 5-month final capstone project undertaken by a team of FPT students.
+
 ChanhXeMienTay is a platform that bridges 'Nhà chành' and customers, offering flexible route search capabilities matched by the ChanhXeMienTay system. It not only enables customers to find suitable routes but also provides 'Nhà chành' with modern and user-friendly features management at an extremely affordable fee.
 
 ## Order relevant repositories
